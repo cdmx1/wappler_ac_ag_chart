@@ -1,0 +1,20 @@
+{
+    "name": "@cdmx/wappler_ac_ag_chart",
+    "version": "0.0.1",
+    "type": "module",
+    "description": "App Connect module for AG Chart Generation",
+    "license": "MIT",
+    "author": {
+        "name": "cdmx1",
+        "url": "https://github.com/cdmx1"
+    },
+    "keywords": [
+        "wappler-extension",
+        "app-connect",
+        "ag-grid"
+    ],
+    "scripts": {
+        "build": "rollup --config",
+        "publish-dry-run": "npm publish ./dist --access public --dry-run"
+    }
+}

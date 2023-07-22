@@ -1,0 +1,239 @@
+{
+  "components": [
+    {
+      "type": "dmx-ag-chart",
+      "selector": "dmx-ag-chart, [is=dmx-ag-chart]",
+      "groupTitle": "Components",
+      "groupIcon": "fa fa-lg fa-cube",
+      "title": "AG Chart: @@id@@",
+      "icon": "fa fa-lg fa-table",
+      "state": "opened",
+      "anyParent": true,
+      "template": "<dmx-ag-chart id=\"@@id@@\"></dmx-ag-chart>",
+      "baseName": "agchart",
+      "help": "AG Chart component for Graphs",
+      "dataScheme": [
+        {
+          "name": "data",
+          "title": "Data",
+          "type": "object"
+        }
+      ],
+      "outputType": "object",
+      "dataPick": true,
+      "outputType": "object",
+      "dataScheme": [
+        {
+          "name": "data",
+          "title": "Data",
+          "type": "object"
+        }
+      ],
+      "properties": [
+        {
+          "group": "AG Chart Properties",
+          "variables": [
+            {
+              "name": "id",
+              "attribute": "id",
+              "title": "ID",
+              "type": "text",
+              "required": true,
+              "help": "Unique ID"
+            },
+            {
+              "name": "chartData",
+              "attribute": "dmx-bind:data",
+              "title": "Data Source",
+              "type": "text",
+              "dataBindings": true,
+              "defaultValue": [],
+              "required": true,
+              "help": "Enter Data Source"
+            }
+          ]
+        },
+        {
+          "group": "AG Chart Options",
+          "variables": [
+            {
+              "name": "chart_type",
+              "attribute": "type",
+              "title": "Chart Type",
+              "type": "droplist",
+              "defaultValue": "line",
+              "values": [
+              {title: 'Line', value: 'line'},
+              {title: 'Bar', value: 'bar'},
+              {title: 'Column', value: 'column'}
+              {title: 'Area', value: 'area'}
+              ],
+              "help": "Select the type of chart to be displayed"
+            },
+            {
+              "name": "xkey",
+              "attribute": "xkey",
+              "title": "X-Axis Key",
+              "type": "text",
+              "help": "The data key for the x-axis of the chart"
+            },
+            {
+              "name": "ykeys",
+              "attribute": "ykeys",
+              "title": "Y-Axis Keys",
+              "type": "text",
+              "help": "Comma-separated data keys for the y-axis of the chart"
+            },
+            {
+              "name": "xy_axis",
+              "attribute": "xy_axis",
+              "title": "XY Axis",
+              "type": "boolean",
+              "help": "XY Axis for single series in the chart"
+            },
+            {
+              "name": "legend",
+              "attribute": "legend",
+              "title": "Legend",
+              "type": "boolean",
+              "help": "Enable/Disable the legend"
+            },
+            {
+              "name": "legend_spacing",
+              "attribute": "legend_spacing",
+              "title": "Legend Spacing",
+              "type": "number",
+              "help": "Legend Spacing"
+            },
+            {
+              "name": "hide_x",
+              "attribute": "hide_x",
+              "title": "Hide X Axis Label",
+              "type": "boolean",
+              "help": "Enable to hide the x axis label"
+            },
+            {
+              "name": "hide_y",
+              "attribute": "hide_y",
+              "title": "Hide Y Axis Label",
+              "type": "boolean",
+              "help": "Enable to hide the y axis label"
+            }
+            
+          ]
+        }
+      ],
+      "actionsScheme": [],
+      "children": [],
+      "allowed_children": {},
+      "copyFiles": [
+        {
+          "src": "ag-charts-community.min.js",
+          "dst": "js/ag-charts-community.min.js"
+        },
+        {
+          "src": "dmx-ag-chart.js",
+          "dst": "js/dmx-ag-chart.js"
+        }
+      ],
+      "linkFiles": [
+        {
+          "src": "js/ag-charts-community.min.js",
+          "type": "js",
+          "defer": true
+        },
+        {
+          "src": "js/dmx-ag-chart.js",
+          "type": "js",
+          "defer": true
+        }
+      ],
+      "cssOrder": [],
+      "jsOrder": []
+    }
+  ],
+  "attributes": [
+    {
+      "name": "dmx-ag-chart-value",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "chart_options",
+      "title": "Chart Options",
+      "type": "boolean",
+      "display": "fieldset",
+      "icon": "fa fa-lg fa-chevron-right",
+      "groupTitle": "Chart Config",
+      "groupIcon": "fa fa-lg fa-cubes",
+      "defaultValue": false,
+      "show": [
+        "valueValue"
+      ],
+      "noChangeOnHide": true,
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "valueValue",
+          "attributeStartsWith": "dmx-bind",
+          "attribute": "ColumnDefs",
+          "isValue": true,
+          "dataBindings": true,
+          "title": "Column Definitions:",
+          "type": "text",
+          "help": "Edit Column Definitions.",
+          "defaultValue": "",
+          "initDisplay": "none"
+        }
+      ],
+      "allowedOn": {
+        "dmx-ag-chart": true
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "dmx-ag-chart-row-data-updated",
+      "attributeStartsWith": "dmx-on",
+      "display": "fieldset",
+      "title": "Updated",
+      "icon": "fa fa-lg fa-chevron-right",
+      "groupTitle": "Chart Events",
+      "groupIcon": "fa fa-lg fa-cubes",
+      "defaultValue": false,
+      "show": [
+        "updatedValue",
+        "updatedMods"
+      ],
+      "noChangeOnHide": true,
+      "type": "boolean",
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "updatedValue",
+          "attributeStartsWith": "dmx-on",
+          "attribute": "updated",
+          "isValue": true,
+          "actionsPicker": true,
+          "title": "Action:",
+          "type": "text",
+          "help": "Choose the action to execute.",
+          "defaultValue": "",
+          "initDisplay": "none" //, required: true
+        },
+        {
+          "name": "updatedMods",
+          "attributeStartsWith": "dmx-on",
+          "attribute": "updated",
+          "isModifiers": true,
+          "title": "Modifiers:",
+          "type": "enum",
+          "defaultValue": "",
+          "initDisplay": "none",
+          "valuesType": "event_modifiers" //values: EVENT_MODIFIERS
+        }
+      ],
+      "allowedOn": {
+        "dmx-ag-chart": true
+      }
+    }
+  ],
+  "static_events": []
+}
