@@ -72,14 +72,14 @@
             },
             {
               "name": "xkey",
-              "attribute": "dmx-bind:xkey",
+              "attribute": "xkey",
               "title": "X-Axis Key",
               "type": "text",
               "help": "The data key for the x-axis of the chart"
             },
             {
               "name": "ykeys",
-              "attribute": "dmx-bind:ykeys",
+              "attribute": "ykeys",
               "title": "Y-Axis Keys",
               "type": "text",
               "help": "Comma-separated data keys for the y-axis of the chart"
@@ -107,7 +107,7 @@
             },
             {
               "name": "legend_shapes",
-              "attribute": "dmx-bind:legend_shapes",
+              "attribute": "legend_shapes",
               "title": "Legend shapes",
               "type": "droplist",
               "defaultValue": "circle",
@@ -121,14 +121,14 @@
             },
             {
               "name": "legend_spacing",
-              "attribute": "dmx-bind:legend_spacing",
+              "attribute": "legend_spacing",
               "title": "Legend Spacing",
               "type": "number",
               "help": "Legend Spacing"
             },
             {
               "name": "legend_position",
-              "attribute": "dmx-bind:legend_position",
+              "attribute": "legend_position",
               "title": "Legend Position",
               "type": "droplist",
               "defaultValue": "bottom",
@@ -140,7 +140,7 @@
             },
             {
               "name": "hide_x",
-              "attribute": "dmx-bind:hide_x",
+              "attribute": "hide_x",
               "title": "Hide X Axis Label",
               "type": "boolean",
               "help": "Enable to hide the x axis label"
