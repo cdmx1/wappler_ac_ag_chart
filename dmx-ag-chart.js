@@ -1,7 +1,6 @@
 dmx.Component('ag-chart', {
   initialData: {
     id: null,
-    type: null,
     xkey: [],
     ykeys: [],
     data: [],
@@ -15,67 +14,86 @@ dmx.Component('ag-chart', {
     id: { default: null },
     xkey: { type: String, default: null },
     ykeys: { type: Array, default: [] },
-    type: { type: String, default: 'line' },
+    chart_type: { type: String, default: 'line' },
     data: { type: Array, default: [] },
+    stacked: { type: Boolean, default: true },
     legend: { type: Boolean, default: true },
     legend_spacing: { type: Number, default: 40 },
+    legend_position: { type: String, default: 'bottom' },
+    legend_shapes: { type: String, default: 'circle' },
     hide_x: { type: Boolean, default: false },
     hide_y: { type: Boolean, default: false },
-    xy_axis: { type: Boolean, default: false }
+    xy_axis: { type: Boolean, default: false },
+    humanize_ykey: { type: Boolean, default: false }
   },
 
   methods: {
-    setData: function (rowData, xkey, ykeys) {
-      this.set('rowData', rowData);
-      this.set('xkey', xkey);
-      this.set('ykeys', ykeys);
+    setValue: function (rowData, xkey, ykeys) {
+      this.data.rowData = rowData;
+      this.data.chart_type = chart_type;
+      this.data.xkey = xkey;
+      this.data.ykeys = ykeys;
       this.refreshChart();
     }
   },
 
   refreshChart: function () {
-    console.log("refreshChart called")
     const chartId = this.props.id;
     const rowData = this.props.data;
     const xkey_user = this.props.xkey;
     const ykeys_user = this.props.ykeys;
     const xy_axis = this.props.xy_axis;
-    const type = this.props.type;
+    const chart_type = this.props.chart_type;
+    const stacked = this.props.stacked;
     const legend = this.props.legend;
     const legend_spacing = this.props.legend_spacing;
+    const legend_position = this.props.legend_position;
+    const legend_shapes = this.props.legend_shapes;
     const hide_x = this.props.hide_x;
     const hide_y = this.props.hide_y;
-    // Split the string into an array using the comma as the delimiter
-    // let ykeysArray = ykeys.split(',');
-
-    // If the ykeysArray contains only one element and that element is an empty string, handle it as a single value array
-    // if (ykeysArray.length === 1 && ykeysArray[0].trim() === '') {
-    //   ykeysArray = [];
-    // }
-    // if (!rowData || rowData.length === 0 || !xkey || ykeys.length === 0) {
-    //   console.error('Invalid data or chart options.');
-    //   return;
-    // }
+    const humanize_ykey = this.props.humanize_ykey;
+    function humanize(str) {
+      if (str == null) return str;
+    
+      str = String(str)
+        .trim()
+        .replace(/([a-z\D])([A-Z]+)/g, '$1_$2')
+        .replace(/[-\s]+/g, '_')
+        .toLowerCase()
+        .replace(/_id$/, '')
+        .replace(/_/g, ' ')
+        .trim();
+    
+      return str.charAt(0).toUpperCase() + str.substr(1);
+    }
+    function renderer(params) {
+      return (
+        '<div class="ag-chart-tooltip-title" style="background-color:' +
+        params.color +
+        '">' +
+        (humanize_ykey ? humanize(params.yKey):params.yKey) +
+        '</div>' +
+        '<div class="ag-chart-tooltip-content">' +
+        params.yValue.toFixed(0) +
+        '</div>'
+      );
+    }
 
 let series;
 let chartData;
 let xkey;
 let ykeysArray;
-if (xy_axis) {
+if (this.props.xy_axis) {
   xkey = 'x_axis';
-  ykeysArray = rowData.map(item => item.flags);
-  
+  const firstKey = Object.keys(rowData[0])[0];
+  ykeysArray = rowData.map(item => item[firstKey]);
   chartData = rowData.map((item, index) => {
-    const { flags, count } = item;
+    const { [firstKey]: firstKeyData, count } = item;
     const chartItem = { [xkey]: index + 1 };
-    chartItem[flags] = parseInt(count);
+    chartItem[firstKeyData] = parseInt(count);
     return chartItem;
   });
-
-  console.log(chartData);
-
-  series = ykeysArray.map(ykey => ({ type: type, xKey: xkey, yKey: ykey, stacked: true }));
-  console.log(series);
+  series = ykeysArray.map(ykey => ({ type: chart_type, xKey: xkey, yKey: ykey, yName: humanize_ykey ? humanize(ykey):ykey, tooltip: { renderer: renderer }, stacked: stacked }));
 }
 else {
   chartData = rowData.map(function(item) {
@@ -94,8 +112,9 @@ else {
   xkey = Object.keys(chartData[0])[0];
   ykeysArray = Object.keys(chartData[0]).slice(1);
   console.log(ykeysArray);
-  series = ykeysArray.map(ykey => ({ type: type, xKey: xkey, yKey: ykey, stacked: true }));
+  series = ykeysArray.map(ykey => ({ type: chart_type, xKey: xkey, yKey: ykey, yName: humanize_ykey ? humanize(ykey):ykey, tooltip: { renderer: renderer }, stacked: stacked }));
 }
+
     this.$node.innerHTML = `<div id=${chartId +'-chart'}></div>`
     chartOptions = {
       container: document.getElementById(chartId+'-chart'),
@@ -103,7 +122,13 @@ else {
       series: series,
       legend: {
         enabled: legend,
-        spacing: legend_spacing
+        spacing: legend_spacing,
+        position: legend_position,
+        item: {
+          marker: {
+              shape: legend_shapes, // 'square', 'diamond', 'cross', 'plus', 'triangle'
+          }
+      }
       },
       axes: [
         {
@@ -122,9 +147,7 @@ else {
         }
     ]
     };
-    console.log(chartOptions)
-
-    // Create ag-Chart instance
+    // console.log(chartOptions)
     agCharts.AgChart.create(chartOptions);
   },
 
@@ -132,16 +155,17 @@ else {
     'dmx-ag-chart-row-data-updated': Event
   },
 
-  render: function () {
-    // this.refreshChart();
+  render: function(node) {
+    if (this.$node) {
+      this.$parse();
+    }
   },
 
   update: function (props) {
-    
     // dmx.equal is a helper function that does a deep compare
     // which is useful when comparing arrays and objects
     if (!dmx.equal(this.props.data, props.data)) {
-      console.log(this.props.ykeys)
+      
       this.refreshChart();
     }
   },
