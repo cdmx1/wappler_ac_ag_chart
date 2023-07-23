@@ -129,7 +129,7 @@
             {
               "name": "legend_position",
               "attribute": "dmx-bind:legend_position",
-              "title": "Legend Spacing",
+              "title": "Legend Position",
               "type": "droplist",
               "defaultValue": "bottom",
               "values": [
