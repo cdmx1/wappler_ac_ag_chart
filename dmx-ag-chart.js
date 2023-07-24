@@ -14,9 +14,15 @@ dmx.Component('ag-chart', {
     id: { default: null },
     xkey: { type: String, default: null },
     ykeys: { type: Array, default: [] },
+    xkey_title: { type: String, default: null },
+    ykey_title: { type: String, default: null },
     chart_type: { type: String, default: 'line' },
     data: { type: Array, default: [] },
     stacked: { type: Boolean, default: true },
+    series_label: { type: Boolean, default: false },
+    series_label_font: { type: String, default: 'bold' },
+    series_label_font_style: { type: String, default: 'normal' },
+    tooltip_roundoff: { type: Boolean, default: true },
     legend: { type: Boolean, default: true },
     legend_spacing: { type: Number, default: 40 },
     legend_position: { type: String, default: 'bottom' },
@@ -43,8 +49,14 @@ dmx.Component('ag-chart', {
     const xkey_user = this.props.xkey;
     const ykeys_user = this.props.ykeys;
     const xy_axis = this.props.xy_axis;
+    const xkey_title = this.props.xkey_title;
+    const ykey_title = this.props.ykey_title;
     const chart_type = this.props.chart_type;
     const stacked = this.props.stacked;
+    const series_label = this.props.series_label;
+    const series_lable_font = this.props.series_lable_font;
+    const series_lable_font_style = this.props.series_lable_font_style;
+    const tooltip_roundoff = this.props.tooltip_roundoff;
     const legend = this.props.legend;
     const legend_spacing = this.props.legend_spacing;
     const legend_position = this.props.legend_position;
@@ -74,7 +86,7 @@ dmx.Component('ag-chart', {
         (humanize_ykey ? humanize(params.yKey):params.yKey) +
         '</div>' +
         '<div class="ag-chart-tooltip-content">' +
-        params.yValue.toFixed(0) +
+        (tooltip_roundoff ? params.yValue.toFixed(0):params.yValue)  +
         '</div>'
       );
     }
@@ -93,7 +105,18 @@ if (this.props.xy_axis) {
     chartItem[firstKeyData] = parseInt(count);
     return chartItem;
   });
-  series = ykeysArray.map(ykey => ({ type: chart_type, xKey: xkey, yKey: ykey, yName: humanize_ykey ? humanize(ykey):ykey, tooltip: { renderer: renderer }, stacked: stacked }));
+  series = ykeysArray.map(ykey => (
+    { type: chart_type, 
+    xKey: xkey, 
+    yKey: ykey, 
+    yName: humanize_ykey ? humanize(ykey):ykey, 
+    tooltip: { renderer: renderer }, 
+    stacked: stacked,
+    label: {
+      enabled: series_label,
+      fontWeight: series_lable_font,
+      fontStyle: series_lable_font_style
+  } }));
 }
 else {
   chartData = rowData.map(function(item) {
@@ -111,10 +134,20 @@ else {
 });
   xkey = Object.keys(chartData[0])[0];
   ykeysArray = Object.keys(chartData[0]).slice(1);
-  console.log(ykeysArray);
-  series = ykeysArray.map(ykey => ({ type: chart_type, xKey: xkey, yKey: ykey, yName: humanize_ykey ? humanize(ykey):ykey, tooltip: { renderer: renderer }, stacked: stacked }));
-}
-
+  // console.log(ykeysArray);
+  series = ykeysArray.map(ykey => (
+    { type: chart_type, 
+    xKey: xkey, 
+    yKey: ykey, 
+    yName: humanize_ykey ? humanize(ykey):ykey, 
+    tooltip: { renderer: renderer }, 
+    stacked: stacked,
+    label: {
+      enabled: series_label,
+      fontWeight: series_lable_font,
+      fontStyle: series_lable_font_style
+  } }));
+} 
     this.$node.innerHTML = `<div id=${chartId +'-chart'}></div>`
     chartOptions = {
       container: document.getElementById(chartId+'-chart'),
@@ -136,14 +169,22 @@ else {
             position: 'bottom',
             label: {
                 enabled: !hide_x // Set this to 'false' to hide the X-axis labels
-            }
+            },
+            title: {
+              enabled: (xkey_title!=null),
+              text: xkey_title,
+            },
         },
         {
             type: 'number',
             position: 'left',
             label: {
               enabled: !hide_y // Set this to 'false' to hide the X-axis labels
-          }
+          },
+          title: {
+            enabled: (ykey_title!=null),
+            text: ykey_title,
+          },
         }
     ]
     };

@@ -85,11 +85,25 @@
               "help": "Comma-separated data keys for the y-axis of the chart"
             },
             {
+              "name": "xkey_title",
+              "attribute": "xkey_title",
+              "title": "X-Axis Title",
+              "type": "text",
+              "help": "Title for the X Axis"
+            },
+            {
+              "name": "ykey_title",
+              "attribute": "ykey_title",
+              "title": "Y-Axis Title",
+              "type": "text",
+              "help": "Title for the Y Axis"
+            },
+            {
               "name": "xy_axis",
               "attribute": "dmx-bind:xy_axis",
               "title": "XY Axis",
               "type": "boolean",
-              "help": "XY Axis for single series in the chart"
+              "help": "XY Axis for single series in the chart eg. Top 10"
             },
             {
               "name": "stacked",
@@ -98,6 +112,67 @@
               "type": "boolean",
               "help": "If plots are to be Stacked"
             },
+            {
+              "name": "tooltip_roundoff",
+              "attribute": "dmx-bind:tooltip_roundoff",
+              "title": "Tooltip Roundoff",
+              "type": "boolean",
+              "defaultValue": "true",
+              "help": "To enable Y Values rounding off in tooltip"
+            },
+            {
+              "name": "series_label",
+              "attribute": "dmx-bind:series_label",
+              "title": "Series Labels",
+              "type": "boolean",
+              "help": "Enabled/Disable Series labels"
+            },
+            {
+              "name": "series_label_font",
+              "attribute": "series_label_font",
+              "title": "Series Labels Font",
+              "type": "droplist",
+              "defaultValue": "bold",
+              "values": [
+                { "title": "Bold", "value": "bold" },
+                { "title": "Bolder", "value": "bolder" },
+                { "title": "Normal", "value": "normal" },
+                { "title": "Light", "value": "lighter" }
+              ],
+              "help": "Series Labels Font"
+            },
+            {
+              "name": "series_label_font_style",
+              "attribute": "series_label_font_style",
+              "title": "Series Labels Font Style",
+              "type": "droplist",
+              "defaultValue": "normal",
+              "values": [
+                { "title": "Normal", "value": "normal" },
+                { "title": "Italic", "value": "italic" },
+                { "title": "Oblique", "value": "oblique" }
+              ],
+              "help": "Series Labels Font"
+            },
+            {
+              "name": "hide_x",
+              "attribute": "hide_x",
+              "title": "Hide X Axis Label",
+              "type": "boolean",
+              "help": "Enable to hide the x axis label"
+            },
+            {
+              "name": "hide_y",
+              "attribute": "dmx-bind:hide_y",
+              "title": "Hide Y Axis Label",
+              "type": "boolean",
+              "help": "Enable to hide the y axis label"
+            }
+          ]
+        },
+        {
+          "group": "AG Chart Legend",
+          "variables": [
             {
               "name": "legend",
               "attribute": "dmx-bind:legend",
@@ -139,27 +214,12 @@
               "help": "Legend Position"
             },
             {
-              "name": "hide_x",
-              "attribute": "hide_x",
-              "title": "Hide X Axis Label",
-              "type": "boolean",
-              "help": "Enable to hide the x axis label"
-            },
-            {
-              "name": "hide_y",
-              "attribute": "dmx-bind:hide_y",
-              "title": "Hide Y Axis Label",
-              "type": "boolean",
-              "help": "Enable to hide the y axis label"
-            },
-            {
               "name": "humanize_ykey",
               "attribute": "dmx-bind:humanize_ykey",
-              "title": "Humanize Y Axis legends",
+              "title": "Humanize Y Axis Legends",
               "type": "boolean",
-              "help": "Humanize Y Axis legends"
+              "help": "Humanize Y Axis Legends"
             }
-            
           ]
         }
       ],
