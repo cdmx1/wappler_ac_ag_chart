@@ -86,7 +86,7 @@ dmx.Component('ag-chart', {
         (humanize_ykey ? humanize(params.yKey):params.yKey) +
         '</div>' +
         '<div class="ag-chart-tooltip-content">' +
-        (tooltip_roundoff ? params.yValue.toFixed(0):params.yValue)  +
+        (tooltip_roundoff ? params.yValue.toFixed(0):params.yValue.toFixed(2))  +
         '</div>'
       );
     }
@@ -122,19 +122,44 @@ else {
   chartData = rowData.map(function(item) {
     var chartItem = {};
     var keys = Object.keys(item);
-    var xkey = keys[0]; // Autoset the first key as xkey
-    chartItem[xkey] = item[xkey];
+    if (xkey_user) {
+      xkey = xkey_user
+    }
+    else {
+      xkey = keys[0]; // Autoset the first key as xkey
+    }
     
+    chartItem[xkey] = item[xkey];
+    if (ykeys_user.length > 0) {
+      // Convert ykeys_user to an array
+    ykeysArray = ykeys_user.split(',').map(function(item) {
+      return item.trim(); // To remove any leading/trailing spaces around the keys
+    });
+    }
+    else {
     var ykeysArray = keys.slice(1); // Autoset the subsequent keys as ykeys
-
+  }
     ykeysArray.forEach(function(ykey) {
         chartItem[ykey] = item[ykey] !== undefined ? parseFloat(item[ykey]) : NaN;
     });
     return chartItem;
 });
-  xkey = Object.keys(chartData[0])[0];
-  ykeysArray = Object.keys(chartData[0]).slice(1);
-  // console.log(ykeysArray);
+    if (xkey_user) {
+      xkey = xkey_user
+    }
+    else {
+      xkey = Object.keys(chartData[0])[0];
+    }
+    if(ykeys_user.length > 0){
+      // Convert ykeys_user to an array
+    ykeysArray = ykeys_user.split(',').map(function(item) {
+      return item.trim(); // To remove any leading/trailing spaces around the keys
+    });
+    }
+    else {
+      ykeysArray = Object.keys(chartData[0]).slice(1);
+  }
+  
   series = ykeysArray.map(ykey => (
     { type: chart_type, 
     xKey: xkey, 

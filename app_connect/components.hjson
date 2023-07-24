@@ -118,7 +118,7 @@
               "title": "Tooltip Roundoff",
               "type": "boolean",
               "defaultValue": "true",
-              "help": "To enable Y Values rounding off in tooltip"
+              "help": "To enable Y Values rounding off in tooltip to last 2 decimal places"
             },
             {
               "name": "series_label",
