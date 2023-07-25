@@ -12,6 +12,25 @@ dmx.Component('ag-chart', {
 
   attributes: {
     id: { default: null },
+    theme: { type: String, default: 'ag-default' },
+    custom_theme_fills: { type: Array, default: [
+      '#03a9f3', '#ab8ce4', '#e83e8c', '#e46a76', '#fb9678',
+      '#fec107', '#00c292', '#20c997', '#01c0c8', '#6c757d',
+      '#343a40', '#fb9678', '#f8f9fa', '#00c292', '#03a9f3',
+      '#fec107', '#e46a76', '#f8f9fa', '#01c0c8', '#343a40',
+      '#ab8ce4', '#6610f2', '#FF6633', '#FFB399', '#FF33FF',
+      '#FFFF99', '#00B3E6', '#E6B333', '#3366E6', '#999966',
+      '#99FF99', '#B34D4D', '#80B300', '#809900', '#E6B3B3',
+      '#6680B3', '#66991A', '#FF99E6', '#CCFF1A', '#FF1A66',
+      '#E6331A', '#33FFCC', '#66994D', '#B366CC', '#4D8000',
+      '#B33300', '#CC80CC', '#66664D', '#991AFF', '#E666FF',
+      '#4DB3FF', '#1AB399', '#E666B3', '#33991A', '#CC9999',
+      '#B3B31A', '#00E680', '#4D8066', '#809980', '#E6FF80',
+      '#1AFF33', '#999933', '#FF3380', '#CCCC00', '#66E64D',
+      '#4D80CC', '#9900B3', '#E64D66', '#4DB380', '#FF4D4D',
+      '#99E6E6', '#6666FF'
+    ]},
+    custom_theme_stroke: { type: String, default: 'gray' },
     xkey: { type: String, default: null },
     ykeys: { type: Array, default: [] },
     xkey_title: { type: String, default: null },
@@ -19,6 +38,7 @@ dmx.Component('ag-chart', {
     chart_type: { type: String, default: 'line' },
     data: { type: Array, default: [] },
     stacked: { type: Boolean, default: true },
+    strokes: { type: Boolean, default: false },
     series_label: { type: Boolean, default: false },
     series_label_font: { type: String, default: 'bold' },
     series_label_font_style: { type: String, default: 'normal' },
@@ -45,14 +65,18 @@ dmx.Component('ag-chart', {
 
   refreshChart: function () {
     const chartId = this.props.id;
+    const theme = this.props.theme;
+    const custom_theme_fills = this.props.custom_theme_fills;
+    const custom_base_theme = this.props.custom_base_theme;
+    const custom_theme_stroke = this.props.custom_theme_stroke;
     const rowData = this.props.data;
     const xkey_user = this.props.xkey;
     const ykeys_user = this.props.ykeys;
-    const xy_axis = this.props.xy_axis;
     const xkey_title = this.props.xkey_title;
     const ykey_title = this.props.ykey_title;
     const chart_type = this.props.chart_type;
     const stacked = this.props.stacked;
+    const strokes = this.props.strokes;
     const series_label = this.props.series_label;
     const series_lable_font = this.props.series_lable_font;
     const series_lable_font_style = this.props.series_lable_font_style;
@@ -95,6 +119,28 @@ let series;
 let chartData;
 let xkey;
 let ykeysArray;
+var custom_theme = {
+  baseTheme: custom_base_theme,
+  palette: {
+      fills: custom_theme_fills,
+      strokes: [custom_theme_stroke]
+  },
+  overrides: {
+      cartesian: {
+          title: {
+              fontSize: 24
+          },
+          series: {
+              column: {
+                  label: {
+                      enabled: true,
+                      color: 'black'
+                  }
+              }
+          }
+      }
+  }
+};
 if (this.props.xy_axis) {
   xkey = 'x_axis';
   const firstKey = Object.keys(rowData[0])[0];
@@ -112,6 +158,7 @@ if (this.props.xy_axis) {
     yName: humanize_ykey ? humanize(ykey):ykey, 
     tooltip: { renderer: renderer }, 
     stacked: stacked,
+    strokeWidth: (strokes ? 1:0),
     label: {
       enabled: series_label,
       fontWeight: series_lable_font,
@@ -126,18 +173,17 @@ else {
       xkey = xkey_user
     }
     else {
-      xkey = keys[0]; // Autoset the first key as xkey
+      xkey = keys[0]; 
     }
     
     chartItem[xkey] = item[xkey];
     if (ykeys_user.length > 0) {
-      // Convert ykeys_user to an array
     ykeysArray = ykeys_user.split(',').map(function(item) {
-      return item.trim(); // To remove any leading/trailing spaces around the keys
+      return item.trim(); 
     });
     }
     else {
-    var ykeysArray = keys.slice(1); // Autoset the subsequent keys as ykeys
+    var ykeysArray = keys.slice(1);
   }
     ykeysArray.forEach(function(ykey) {
         chartItem[ykey] = item[ykey] !== undefined ? parseFloat(item[ykey]) : NaN;
@@ -151,9 +197,8 @@ else {
       xkey = Object.keys(chartData[0])[0];
     }
     if(ykeys_user.length > 0){
-      // Convert ykeys_user to an array
     ykeysArray = ykeys_user.split(',').map(function(item) {
-      return item.trim(); // To remove any leading/trailing spaces around the keys
+      return item.trim(); 
     });
     }
     else {
@@ -167,6 +212,7 @@ else {
     yName: humanize_ykey ? humanize(ykey):ykey, 
     tooltip: { renderer: renderer }, 
     stacked: stacked,
+    strokeWidth: (strokes ? 1:0),
     label: {
       enabled: series_label,
       fontWeight: series_lable_font,
@@ -184,7 +230,7 @@ else {
         position: legend_position,
         item: {
           marker: {
-              shape: legend_shapes, // 'square', 'diamond', 'cross', 'plus', 'triangle'
+              shape: legend_shapes, 
           }
       }
       },
@@ -193,7 +239,7 @@ else {
             type: 'category',
             position: 'bottom',
             label: {
-                enabled: !hide_x // Set this to 'false' to hide the X-axis labels
+                enabled: !hide_x 
             },
             title: {
               enabled: (xkey_title!=null),
@@ -204,16 +250,16 @@ else {
             type: 'number',
             position: 'left',
             label: {
-              enabled: !hide_y // Set this to 'false' to hide the X-axis labels
+              enabled: !hide_y 
           },
           title: {
             enabled: (ykey_title!=null),
             text: ykey_title,
           },
         }
-    ]
+    ],
+    theme: (theme == 'custom_theme' ? custom_theme : theme)
     };
-    // console.log(chartOptions)
     agCharts.AgChart.create(chartOptions);
   },
 
@@ -228,10 +274,7 @@ else {
   },
 
   update: function (props) {
-    // dmx.equal is a helper function that does a deep compare
-    // which is useful when comparing arrays and objects
     if (!dmx.equal(this.props.data, props.data)) {
-      
       this.refreshChart();
     }
   },

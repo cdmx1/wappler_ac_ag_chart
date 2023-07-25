@@ -65,8 +65,29 @@
               "values": [
               {title: 'Line', value: 'line'},
               {title: 'Bar', value: 'bar'},
-              {title: 'Column', value: 'column'}
+              {title: 'Column', value: 'column'},
               {title: 'Area', value: 'area'}
+              ],
+              "help": "Select the type of chart to be displayed"
+            },
+            {
+              "name": "theme",
+              "attribute": "theme",
+              "title": "Chart Theme",
+              "type": "droplist",
+              "defaultValue": "ag-default",
+              "values": [
+              {title: 'Default', value: 'ag-default'},
+              {title: 'Dark', value: 'ag-default-dark'},
+              {title: 'Material', value: 'ag-material'},
+              {title: 'Material Dark', value: 'ag-material-dark'},
+              {title: 'Pastel', value: 'ag-pastel'},
+              {title: 'Pastel Dark', value: 'ag-pastel-dark'},
+              {title: 'Solar', value: 'ag-solar'},
+              {title: 'Solar Dark', value: 'ag-solar-dark'},
+              {title: 'Vivid', value: 'ag-vivid'},
+              {title: 'Vivid Dark', value: 'ag-vivid-dark'},
+              {title: 'Custom', value: 'custom_theme'}
               ],
               "help": "Select the type of chart to be displayed"
             },
@@ -113,12 +134,19 @@
               "help": "If plots are to be Stacked"
             },
             {
+              "name": "strokes",
+              "attribute": "dmx-bind:strokes",
+              "title": "Strokes",
+              "type": "boolean",
+              "help": "Enable or Disable outline strokes for fills"
+            },
+            {
               "name": "tooltip_roundoff",
               "attribute": "dmx-bind:tooltip_roundoff",
               "title": "Tooltip Roundoff",
               "type": "boolean",
               "defaultValue": "true",
-              "help": "To enable Y Values rounding off in tooltip to last 2 decimal places"
+              "help": "To enable Y Values rounding off in tooltip"
             },
             {
               "name": "series_label",
