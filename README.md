@@ -28,3 +28,40 @@ This is essentially helpful for queries such as Top 10, top 50, etc.
 
 We can feed this in directly to the module data source.
 Note: setting xkey and xkeys form the UI is optional, it takes the first key for x and subsequent keys as ykeys
+
+
+For PostgresSQL a query similar to beow can be constructed:
+SELECT
+    JSON_AGG(
+        JSON_BUILD_OBJECT(
+            'checks', checks,
+            'count', count
+        )
+    ) AS result
+FROM (
+    SELECT
+        'checked' AS checks,
+        COALESCE(count(1), 0) AS count
+    FROM
+        user_data
+    WHERE
+        AND created_at >= NOW() - INTERVAL '1 DAY'
+    UNION ALL
+    SELECT
+        'under_review' AS checks,
+        COALESCE(SUM(under_review::int), 0) AS count
+    FROM
+        user_data
+    WHERE
+        AND created_at >= NOW() - INTERVAL '1 DAY'
+    UNION ALL
+    SELECT
+        'rejected' AS checks,
+        COALESCE(SUM(rejected::int), 0) AS count
+    FROM
+        user_data
+    WHERE
+        AND created_at >= NOW() - INTERVAL '1 DAY'
+) AS subquery;
+
+Then enable the XY axis to display the data
