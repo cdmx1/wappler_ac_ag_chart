@@ -1,3 +1,5 @@
+#### Developed and Maintained by Roney Dsilva
+
 ## AG Chart Component Documentation
 
 ### Component Overview
@@ -42,7 +44,7 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 The module can be used to generate AG Charts given a data source.
 
 It Accepts Data sources in 2 formats:
-1. As an array with key values, one for the terms, the other for the count
+##### 1. As an array with key values, one for the terms, the other for the count
 ```
  [
   {
@@ -54,7 +56,7 @@ It Accepts Data sources in 2 formats:
 In the above case, we can enable the XY Axis toggle provided in the UI module so that it can generate a series for the same based on the values.
 This is essentially helpful for queries such as Top 10, top 50, etc.
 
-2. For the 2nd type of Data, the below format is accepted:
+##### 2. For the 2nd type of Data, the below format is accepted:
 ```
 [
   {
