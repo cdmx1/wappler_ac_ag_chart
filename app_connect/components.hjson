@@ -50,6 +50,14 @@
               "defaultValue": [],
               "required": true,
               "help": "Enter Data Source"
+            },
+            { 
+            "name": "chartNoLoad", 
+            "hasAttribute": "noload", 
+            "title": "No Auto Load", 
+            "type": "boolean", 
+            "defaultValue": "", 
+            "initValue": true
             }
           ]
         },
@@ -251,7 +259,17 @@
           ]
         }
       ],
-      "actionsScheme": [],
+      "actionsScheme": [
+        {
+          addTitle: 'Load',
+          title : 'Load',
+          name : 'loadChart',
+          icon : 'fa fa-lg fa-play',
+          state : 'opened',
+          help: 'Load the AG Chart',
+          properties : []
+        }
+      ],
       "children": [],
       "allowed_children": {},
       "copyFiles": [

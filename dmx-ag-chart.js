@@ -1,17 +1,11 @@
 dmx.Component('ag-chart', {
   initialData: {
-    id: null,
-    xkey: [],
-    ykeys: [],
-    data: [],
-    legend: true,
-    hide_x: false,
-    hide_y: false,
-    xy_axis: false,
+    id: null
   },
 
   attributes: {
     id: { default: null },
+    noload: { type: Boolean, default: false },
     theme: { type: String, default: 'ag-default' },
     custom_theme_fills: { type: Array, default: [
       '#03a9f3', '#ab8ce4', '#e83e8c', '#e46a76', '#fb9678',
@@ -60,7 +54,12 @@ dmx.Component('ag-chart', {
       this.data.xkey = xkey;
       this.data.ykeys = ykeys;
       this.refreshChart();
-    }
+    },
+    loadChart: function () {
+      dmx.nextTick(function() {
+      this.refreshChart();
+      }, this);
+    },
   },
 
   refreshChart: function () {
@@ -274,7 +273,7 @@ else {
   },
 
   update: function (props) {
-    if (!dmx.equal(this.props.data, props.data)) {
+    if (!dmx.equal(this.props.data, props.data) && !this.props.noload) {
       this.refreshChart();
     }
   },

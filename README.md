@@ -10,8 +10,9 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 
 #### AG Chart Properties
 
-- **ID**: Unique identifier for the chart. (Required)
-- **Data Source**: The data source for the chart, eg SC or JS data source. (Required)
+1. **ID**: Unique identifier for the chart. (Required)
+2. **Data Source**: The data source for the chart, eg SC or JS data source. (Required)
+3. **No Auto Load**: Set to true to disable auto-load of the grid. (Default: false)
 
 #### AG Chart Options
 
@@ -38,6 +39,12 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 - **Legend Spacing**: Adjust the spacing between legend items.
 - **Legend Position**: Choose the position of the legend (Bottom, Top).
 - **Humanize Y Axis Legends**: Humanize Y-axis legends for better readability.
+
+#### Action Attributes
+
+**Load**
+- Mainly to be used in conjunction with "No Auto Load" enabled so that you can load only when certain conditions are met.
+- Use Case: Used when you're awaiting the population of specific elements or data before loading the chart. It's also useful for refreshing the chart intentionally.
 
 ### Usage
 
