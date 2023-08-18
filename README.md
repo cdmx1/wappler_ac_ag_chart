@@ -1,18 +1,61 @@
-This Wappler module can be used to generate AG Charts given a data source.
+## AG Chart Component Documentation
 
-It Accepts Data source in 2 formats:
-1. As a array with key values, one for the terms, other for the count
+### Component Overview
+
+This module is used for creating dynamic charts in Wappler. It provides various properties for configuring the appearance and behavior of the charts.
+
+### Component Properties
+
+#### AG Chart Properties
+
+- **ID**: Unique identifier for the chart. (Required)
+- **Data Source**: The data source for the chart, eg SC or JS data source. (Required)
+
+#### AG Chart Options
+
+- **Chart Type**: Select the type of chart to be displayed. Currently supported: Line, Bar, Column, and Area.
+- **Chart Theme**: Choose the visual theme for the chart. Options include Default, Dark, Material, Pastel, and Custom.
+- **X-Axis Key**: The data key for the x-axis of the chart (Optional).
+- **Y-Axis Keys**: Comma-separated data keys for the y-axis of the chart (Optional).
+- **X-Axis Title**: Title for the X-axis of the chart.
+- **Y-Axis Title**: Title for the Y-axis of the chart.
+- **XY Axis**: Enable XY axis for single series in the chart.
+- **Stacked**: Enable stacking of plots in the chart.
+- **Strokes**: Enable or disable outline strokes for fills.
+- **Tooltip Roundoff**: Enable rounding off of Y values in tooltips.
+- **Series Labels**: Enable or disable series labels.
+- **Series Labels Font**: Choose the font weight for series labels.
+- **Series Labels Font Style**: Choose the font style for series labels.
+- **Hide X Axis Label**: Enable to hide the X-axis label.
+- **Hide Y Axis Label**: Enable to hide the Y-axis label.
+
+#### AG Chart Legend
+
+- **Legend**: Enable or disable the chart legend.
+- **Legend Shapes**: Choose the shape of the legend markers (Circle, Square, Cross, Triangle).
+- **Legend Spacing**: Adjust the spacing between legend items.
+- **Legend Position**: Choose the position of the legend (Bottom, Top).
+- **Humanize Y Axis Legends**: Humanize Y-axis legends for better readability.
+
+### Usage
+
+The module can be used to generate AG Charts given a data source.
+
+It Accepts Data sources in 2 formats:
+1. As an array with key values, one for the terms, the other for the count
+```
  [
   {
     "category": "BALLONS",
     "count": "533"
   }...
  ]
-
-In the Above case we can enable the XY Axis toggle provided in the UI module so that it can generate a series for same based on the values.
+```
+In the above case, we can enable the XY Axis toggle provided in the UI module so that it can generate a series for the same based on the values.
 This is essentially helpful for queries such as Top 10, top 50, etc.
 
-2. For the 2nd type of Data, below format is accepted:
+2. For the 2nd type of Data, the below format is accepted:
+```
 [
   {
     "month": "2026-12",
@@ -25,12 +68,12 @@ This is essentially helpful for queries such as Top 10, top 50, etc.
     "flagged": "1"
   }...
 ]
+```
+We can feed this directly to the module data source.
+Note: setting xkey and xkeys from the UI is optional, it takes the first key for x and subsequent keys as ykeys
 
-We can feed this in directly to the module data source.
-Note: setting xkey and xkeys form the UI is optional, it takes the first key for x and subsequent keys as ykeys
-
-
-For PostgresSQL a query similar to beow can be constructed:
+For PostgresSQL a query similar to below can be constructed:
+```
 SELECT
     JSON_AGG(
         JSON_BUILD_OBJECT(
@@ -63,5 +106,5 @@ FROM (
     WHERE
         AND created_at >= NOW() - INTERVAL '1 DAY'
 ) AS subquery;
-
+```
 Then enable the XY axis to display the data
