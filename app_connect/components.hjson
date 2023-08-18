@@ -256,7 +256,7 @@
       "allowed_children": {},
       "copyFiles": [
         {
-          "src": "ag-charts-community.min.js",
+          "src": "../../../node_modules/ag-charts-community/dist/ag-charts-community.min.js",
           "dst": "js/ag-charts-community.min.js"
         },
         {
@@ -298,18 +298,6 @@
       "noChangeOnHide": true,
       "groupEnabler": true,
       "children": [
-        {
-          "name": "valueValue",
-          "attributeStartsWith": "dmx-bind",
-          "attribute": "ColumnDefs",
-          "isValue": true,
-          "dataBindings": true,
-          "title": "Column Definitions:",
-          "type": "text",
-          "help": "Edit Column Definitions.",
-          "defaultValue": "",
-          "initDisplay": "none"
-        }
       ],
       "allowedOn": {
         "dmx-ag-chart": true
@@ -317,51 +305,6 @@
     }
   ],
   "events": [
-    {
-      "name": "dmx-ag-chart-row-data-updated",
-      "attributeStartsWith": "dmx-on",
-      "display": "fieldset",
-      "title": "Updated",
-      "icon": "fa fa-lg fa-chevron-right",
-      "groupTitle": "Chart Events",
-      "groupIcon": "fa fa-lg fa-cubes",
-      "defaultValue": false,
-      "show": [
-        "updatedValue",
-        "updatedMods"
-      ],
-      "noChangeOnHide": true,
-      "type": "boolean",
-      "groupEnabler": true,
-      "children": [
-        {
-          "name": "updatedValue",
-          "attributeStartsWith": "dmx-on",
-          "attribute": "updated",
-          "isValue": true,
-          "actionsPicker": true,
-          "title": "Action:",
-          "type": "text",
-          "help": "Choose the action to execute.",
-          "defaultValue": "",
-          "initDisplay": "none" //, required: true
-        },
-        {
-          "name": "updatedMods",
-          "attributeStartsWith": "dmx-on",
-          "attribute": "updated",
-          "isModifiers": true,
-          "title": "Modifiers:",
-          "type": "enum",
-          "defaultValue": "",
-          "initDisplay": "none",
-          "valuesType": "event_modifiers" //values: EVENT_MODIFIERS
-        }
-      ],
-      "allowedOn": {
-        "dmx-ag-chart": true
-      }
-    }
   ],
   "static_events": []
 }
