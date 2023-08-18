@@ -1,4 +1,4 @@
-#### Developed and Maintained by Roney Dsilva
+#### Developed and Maintained by: Roney Dsilva
 
 ## AG Chart Component Documentation
 
@@ -12,7 +12,7 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 
 1. **ID**: Unique identifier for the chart. (Required)
 2. **Data Source**: The data source for the chart, eg SC or JS data source. (Required)
-3. **No Auto Load**: Set to true to disable auto-load of the grid. (Default: false)
+3. **No Auto Load**: Set to true to disable auto-load of the chart. (Default: false)
 
 #### AG Chart Options
 
