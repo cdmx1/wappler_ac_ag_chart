@@ -150,19 +150,31 @@ if (this.props.xy_axis) {
     chartItem[firstKeyData] = parseInt(count);
     return chartItem;
   });
-  series = ykeysArray.map(ykey => (
-    { type: chart_type, 
-    xKey: xkey, 
-    yKey: ykey, 
-    yName: humanize_ykey ? humanize(ykey):ykey, 
-    tooltip: { renderer: renderer }, 
-    stacked: stacked,
-    strokeWidth: (strokes ? 1:0),
-    label: {
-      enabled: series_label,
-      fontWeight: series_lable_font,
-      fontStyle: series_lable_font_style
-  } }));
+  series = ykeysArray.map(ykey => {
+    const seriesConfig = {
+      type: chart_type,
+      stacked: stacked,
+      strokeWidth: (strokes ? 1:0)
+    }
+    if (chart_type !== 'pie') {
+      seriesConfig.yName = humanize_ykey ? humanize(ykey):ykey;
+      seriesConfig.xKey = xkey;
+      seriesConfig.yKey = ykey;
+      seriesConfig.tooltip = { renderer: renderer };
+      seriesConfig.label = {
+        enabled: series_label,
+        fontWeight: series_lable_font,
+        fontStyle: series_lable_font_style
+    }
+    }
+    else {
+      seriesConfig.angleKey = ykey;
+      seriesConfig.sectorLabelKey = ykey;
+      seriesConfig.calloutLabelKey = xkey;
+      seriesConfig.innerRadiusOffset = 0;
+    }
+    return seriesConfig;
+});
 }
 else {
   chartData = rowData.map(function(item) {
@@ -203,20 +215,32 @@ else {
     else {
       ykeysArray = Object.keys(chartData[0]).slice(1);
   }
-  
-  series = ykeysArray.map(ykey => (
-    { type: chart_type, 
-    xKey: xkey, 
-    yKey: ykey, 
-    yName: humanize_ykey ? humanize(ykey):ykey, 
-    tooltip: { renderer: renderer }, 
-    stacked: stacked,
-    strokeWidth: (strokes ? 1:0),
-    label: {
-      enabled: series_label,
-      fontWeight: series_lable_font,
-      fontStyle: series_lable_font_style
-  } }));
+  series = ykeysArray.map(ykey => {
+    const seriesConfig = {
+      type: chart_type, 
+      stacked: stacked,
+      strokeWidth: (strokes ? 1:0)
+    }
+    if (chart_type !== 'pie') {
+      seriesConfig.yName = humanize_ykey ? humanize(ykey):ykey;
+      seriesConfig.xKey = xkey;
+      seriesConfig.yKey = ykey;
+      seriesConfig.tooltip = { renderer: renderer };
+      seriesConfig.label = {
+        enabled: series_label,
+        fontWeight: series_lable_font,
+        fontStyle: series_lable_font_style
+    }
+    }
+    else {
+      seriesConfig.angleKey = ykey;
+      seriesConfig.sectorLabelKey = ykey;
+      seriesConfig.calloutLabelKey = xkey;
+      seriesConfig.innerRadiusOffset = 0;
+    }
+    return seriesConfig
+
+    });
 } 
     this.$node.innerHTML = `<div id=${chartId +'-chart'}></div>`
     chartOptions = {
