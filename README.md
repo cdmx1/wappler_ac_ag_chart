@@ -16,13 +16,13 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 
 #### AG Chart Options
 
-- **Chart Type**: Select the type of chart to be displayed. Currently supported: Line, Bar, Column, and Area.
+- **Chart Type**: Select the type of chart to be displayed. Currently supported: Line, Column(Bar), Pie, and Area.
 - **Chart Theme**: Choose the visual theme for the chart. Options include Default, Dark, Material, Pastel, and Custom.
 - **X-Axis Key**: The data key for the x-axis of the chart (Optional).
 - **Y-Axis Keys**: Comma-separated data keys for the y-axis of the chart (Optional).
 - **X-Axis Title**: Title for the X-axis of the chart.
 - **Y-Axis Title**: Title for the Y-axis of the chart.
-- **XY Axis**: Enable XY axis for single series in the chart.
+- **XY Axis**: Enable the XY axis for single series in the chart.
 - **Stacked**: Enable stacking of plots in the chart.
 - **Strokes**: Enable or disable outline strokes for fills.
 - **Tooltip Roundoff**: Enable rounding off of Y values in tooltips.
