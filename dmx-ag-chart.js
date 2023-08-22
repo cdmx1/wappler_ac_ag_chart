@@ -44,7 +44,15 @@ dmx.Component('ag-chart', {
     hide_x: { type: Boolean, default: false },
     hide_y: { type: Boolean, default: false },
     xy_axis: { type: Boolean, default: false },
-    humanize_ykey: { type: Boolean, default: false }
+    humanize_ykey: { type: Boolean, default: false },
+    inner_radius_offset: { type: Number, default: 0 },
+    inner_label_value: { type: String, default: null },
+    inner_label_value_color: { type: String, default: 'red' },
+    inner_label_value_font_size: { type: String, default: 72 },
+    inner_label_title: { type: String, default: 'Fancy title' },
+    inner_label_title_font_size: { type: Number, default: 24 },
+    inner_label_title_margin: { type: Number, default: 4 },
+    inner_cicle_fill_color: { type: String, default: 'green' },
   },
 
   methods: {
@@ -63,6 +71,7 @@ dmx.Component('ag-chart', {
   },
 
   refreshChart: function () {
+    const options = this.props
     const chartId = this.props.id;
     const theme = this.props.theme;
     const custom_theme_fills = this.props.custom_theme_fills;
@@ -171,7 +180,25 @@ if (this.props.xy_axis) {
       seriesConfig.angleKey = ykey;
       seriesConfig.sectorLabelKey = ykey;
       seriesConfig.calloutLabelKey = xkey;
-      seriesConfig.innerRadiusOffset = 0;
+      seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+      if (options.inner_label) {
+      seriesConfig.innerLabels = [
+        {
+          text: options.inner_label_value,
+          color: options.inner_label_value_color,
+          fontSize: options.inner_label_value_font_size,
+        },
+        {
+          text: options.inner_label_title,
+          fontSize: options.inner_label_title_font_size,
+          margin: options.inner_label_title_margin,
+        },
+      ]
+      seriesConfig.innerCircle = {
+        fill: options.inner_cicle_fill_color,
+      }
+    }
+
     }
     return seriesConfig;
 });
@@ -236,7 +263,24 @@ else {
       seriesConfig.angleKey = ykey;
       seriesConfig.sectorLabelKey = ykey;
       seriesConfig.calloutLabelKey = xkey;
-      seriesConfig.innerRadiusOffset = 0;
+      seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+      if (options.inner_label) {
+        seriesConfig.innerLabels = [
+          {
+            text: options.inner_label_value,
+            color: options.inner_label_value_color,
+            fontSize: options.inner_label_value_font_size,
+          },
+          {
+            text: options.inner_label_title,
+            fontSize: options.inner_label_title_font_size,
+            margin: options.inner_label_title_margin,
+          },
+        ]
+        seriesConfig.innerCircle = {
+          fill: options.inner_cicle_fill_color,
+        }
+      }
     }
     return seriesConfig
 
@@ -257,32 +301,34 @@ else {
           }
       }
       },
-      axes: [
-        {
-            type: 'category',
-            position: 'bottom',
-            label: {
-                enabled: !hide_x 
-            },
-            title: {
-              enabled: (xkey_title!=null),
-              text: xkey_title,
-            },
-        },
-        {
-            type: 'number',
-            position: 'left',
-            label: {
-              enabled: !hide_y 
-          },
-          title: {
-            enabled: (ykey_title!=null),
-            text: ykey_title,
-          },
-        }
-    ],
     theme: (theme == 'custom_theme' ? custom_theme : theme)
     };
+    if (options.chart_type != 'pie') {
+      chartOptions.axes = [
+        {
+          type: 'category',
+          position: 'bottom',
+          label: {
+            enabled: !hide_x,
+          },
+          title: {
+            enabled: xkey_title != null,
+            text: xkey_title,
+          },
+        },
+        {
+          type: 'number',
+          position: 'left',
+          label: {
+            enabled: !hide_y,
+          },
+          title: {
+            enabled: ykey_title != null,
+            text: ykey_title,
+          },
+        },
+      ];
+    }
     agCharts.AgChart.create(chartOptions);
   },
 

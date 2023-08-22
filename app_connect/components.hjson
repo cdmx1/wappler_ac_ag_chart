@@ -139,6 +139,7 @@
               "attribute": "dmx-bind:stacked",
               "title": "Stacked",
               "type": "boolean",
+              "defaultValue": "true",
               "help": "If plots are to be Stacked"
             },
             {
@@ -146,6 +147,7 @@
               "attribute": "dmx-bind:strokes",
               "title": "Strokes",
               "type": "boolean",
+              "defaultValue": "false",
               "help": "Enable or Disable outline strokes for fills"
             },
             {
@@ -255,9 +257,112 @@
               "title": "Humanize Y Axis Legends",
               "type": "boolean",
               "help": "Humanize Y Axis Legends"
+            },
+            {
+              "name": "inner_radius_offset",
+              "attribute": "inner_radius_offset",
+              "defaultValue": 0,
+              "title": "Inner Radius Offset",
+              "type": "number",
+              "help": "Inner Radius Offset, applicable for pie charts to make them donut charts or for Inner labels"
             }
           ]
-        }
+        },
+        {
+          "group": "📒 Inner Labels",
+          "variables": [
+            {
+              "name": "innerLabels",
+              "title": "Inner Labels Config",
+              "attributeStartsWith": "dmx-bind",
+              "attribute": "inner_label",
+              "type": "boolean",
+              "defaultValue": "false",
+              "display": "fieldset",
+              "show": [
+                "innerLabel",
+                "innerLabelValue",
+                "innerLabelColor",
+                "innerLabelFontSize",
+                "innerLabelTitle",
+                "innerLabelTitleFontSize",
+                "innerLabelTitleMargin",
+                "innerCicleFillColor"
+              ],
+              "noChangeOnHide": true,
+              "groupEnabler": true,
+              "help": "Configure inner labels for pie chart"
+              "children": [
+                {
+                  "name": "innerLabel",
+                  "attributeStartsWith": "dmx-bind",
+                  "attribute": "inner_label",
+                  "title": "Inner Label",
+                  "defaultValue": "false",
+                  "type": "boolean",
+                  "initDisplay": "none"
+                },
+                {
+                  "name": "innerLabelValue",
+                  "attribute": "inner_label_value",
+                  "dataBindings": true,
+                  "title": "Inner Label",
+                  "defaultValue": null,
+                  "type": "text",
+                  "initDisplay": "none"
+                },
+                {
+                  "name": "innerLabelColor",
+                  "attribute": "inner_label_value_color",
+                  "title": "Inner Label Color",
+                  "type": "text",
+                  "defaultValue": "red",
+                  "initDisplay": "none"
+                },
+                {
+                  "name": "innerLabelFontSize",
+                  "attribute": "inner_label_value_font_size",
+                  "title": "Inner Label Font Size",
+                  "type": "number",
+                  "defaultValue": 72,
+                  "initDisplay": "none"
+                },
+                {
+                  "name": "innerLabelTitle",
+                  "attribute": "inner_label_title",
+                  "title": "Inner Label Title",
+                  "type": "text",
+                  "defaultValue": "Fancy title",
+                  "initDisplay": "none"
+                },
+                {
+                  "name": "innerLabelTitleFontSize",
+                  "attribute": "inner_label_title_font_size",
+                  "title": "Title Font Size",
+                  "type": "number",
+                  "defaultValue": 24,
+                  "initDisplay": "none"
+                },
+                {
+                  "name": "innerLabelTitleMargin",
+                  "attribute": "inner_label_title_margin",
+                  "title": "Title Margin",
+                  "type": "number",
+                  "defaultValue": 4,
+                  "initDisplay": "none"
+                },
+                {
+                  "name": "innerCicleFillColor",
+                  "attribute": "inner_cicle_fill_color",
+                  "title": "Title Margin",
+                  "type": "text",
+                  "defaultValue": "green",
+                  "initDisplay": "none"
+                }
+              ]
+            }
+          ]
+        },
       ],
       "actionsScheme": [
         {
