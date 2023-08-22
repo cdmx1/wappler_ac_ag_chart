@@ -194,9 +194,10 @@
             },
             {
               "name": "hide_x",
-              "attribute": "hide_x",
+              "attribute": "dmx-bind:hide_x",
               "title": "Hide X Axis Label",
               "type": "boolean",
+              
               "help": "Enable to hide the x axis label"
             },
             {
