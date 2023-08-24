@@ -1,6 +1,6 @@
 {
     "name": "@cdmx/wappler_ac_ag_chart",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "type": "module",
     "description": "App Connect module for AG Chart Generation",
     "license": "MIT",

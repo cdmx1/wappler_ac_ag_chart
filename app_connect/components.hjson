@@ -314,7 +314,7 @@
                   "attribute": "inner_label_title",
                   "title": "Inner Label Title",
                   "type": "text",
-                  "defaultValue": "Fancy title",
+                  "defaultValue": "Coverage",
                   "initDisplay": "none"
                 },
                 {
@@ -336,7 +336,7 @@
                 {
                   "name": "innerCicleFillColor",
                   "attribute": "inner_cicle_fill_color",
-                  "title": "Title Margin",
+                  "title": "Inner Circle Fill Color",
                   "type": "text",
                   "defaultValue": "green",
                   "initDisplay": "none"
