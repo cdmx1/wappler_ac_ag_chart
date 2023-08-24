@@ -11,7 +11,7 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 #### AG Chart Properties
 
 1. **ID**: Unique identifier for the chart. (Required)
-2. **Data Source**: The data source for the chart, eg SC or JS data source. (Required)
+2. **Data Source**: The data source for the chart, e.g. SC or JS data source. (Required)
 3. **No Auto Load**: Set to true to disable auto-load of the chart. (Default: false)
 
 #### AG Chart Options
@@ -22,7 +22,7 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 - **Y-Axis Keys**: Comma-separated data keys for the y-axis of the chart (Optional).
 - **X-Axis Title**: Title for the X-axis of the chart.
 - **Y-Axis Title**: Title for the Y-axis of the chart.
-- **XY Axis**: Enable the XY axis for single series in the chart.
+- **XY Axis**: Enable the XY axis for a single series in the chart.
 - **Stacked**: Enable stacking of plots in the chart.
 - **Strokes**: Enable or disable outline strokes for fills.
 - **Tooltip Roundoff**: Enable rounding off of Y values in tooltips.
@@ -43,13 +43,13 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 #### Inner Labels
 This allows configuring Inner labels in a Percentage Pie chart.
 
-  - **Inner Labels**: Checkbox to display the inner labels settnigs
-  - **Inner Label Color**: The color of Inner Percentage. (Deafult: "red")
+  - **Inner Labels**: Checkbox to display the inner labels settings
+  - **Inner Label Color**: The color of Inner Percentage. (Default: "red")
   - **Inner Label Font Size**: The font size of inner label values. (Default: 40).
-  - **Inner Label Title**: The Title for the Percentage Value. (Default: "Coveragee")
-  - **Inner Label Title Font Size**: The font size of Title for the Percentage Value.
+  - **Inner Label Title**: The Title for the Percentage Value. (Default: "Coverage")
+  - **Inner Label Title Font Size**: The font size of the Title for the Percentage Value.
   - **Inner Label Title Margin**: The margin of the inner label title.
-  - **Inner Cicle Fill Color**: The fill color of the inner circle. (Deafult: "green")
+  - **Inner Circle Fill Color**: The fill color of the inner circle. (Default: "green")
 
 #### Action Attributes
 
@@ -90,7 +90,7 @@ This is essentially helpful for queries such as Top 10, top 50, etc.
 ]
 ```
 We can feed this directly to the module data source.
-Note: setting xkey and xkeys from the UI is optional, it takes the first key for x and subsequent keys as ykeys
+Note: Setting xkey and xkeys from the UI is optional, it takes the first key for x and subsequent keys as ykeys
 
 For PostgresSQL a query similar to below can be constructed:
 ```
@@ -129,8 +129,8 @@ FROM (
 ```
 Then enable the XY axis to display the data
 
-Example usage of Percentage Chart:
-Given below input data:
+#### Example usage of Percentage Chart:
+Given below input data below:
 ```
 [
   {
@@ -145,4 +145,4 @@ Given below input data:
 ```
 
 Set Chart Type to "Percentage"
-Set the Inner Label Settings as required, ie the Inner Label title, Font fize etc. or leave defaults
+Set the Inner Label Settings as required, i.e. the Inner Label title, Font size etc. or leave defaults
