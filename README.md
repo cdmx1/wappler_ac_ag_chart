@@ -144,5 +144,6 @@ Given below input data below:
 ]
 ```
 
-Set Chart Type to "Percentage"
-Set the Inner Label Settings as required, i.e. the Inner Label title, Font size etc. or leave defaults
+- Set Chart Type to "Percentage".
+- Set the Inner Label Settings as required, i.e. the Inner Label title, Font size, etc. or leave defaults.
+- Set the Inner Radius Offset to -20.
