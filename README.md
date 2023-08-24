@@ -16,7 +16,7 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 
 #### AG Chart Options
 
-- **Chart Type**: Select the type of chart to be displayed. Currently supported: Line, Column(Bar), Pie, and Area.
+- **Chart Type**: Select the type of chart to be displayed. Currently supported: Line, Column(Bar), Pie, Percentage and Area.
 - **Chart Theme**: Choose the visual theme for the chart. Options include Default, Dark, Material, Pastel, and Custom.
 - **X-Axis Key**: The data key for the x-axis of the chart (Optional).
 - **Y-Axis Keys**: Comma-separated data keys for the y-axis of the chart (Optional).
@@ -39,6 +39,17 @@ This module is used for creating dynamic charts in Wappler. It provides various 
 - **Legend Spacing**: Adjust the spacing between legend items.
 - **Legend Position**: Choose the position of the legend (Bottom, Top).
 - **Humanize Y Axis Legends**: Humanize Y-axis legends for better readability.
+
+#### Inner Labels
+This allows configuring Inner labels in a Percentage Pie chart.
+
+  - **Inner Labels**: Checkbox to display the inner labels settnigs
+  - **Inner Label Color**: The color of Inner Percentage. (Deafult: "red")
+  - **Inner Label Font Size**: The font size of inner label values. (Default: 40).
+  - **Inner Label Title**: The Title for the Percentage Value. (Default: "Coveragee")
+  - **Inner Label Title Font Size**: The font size of Title for the Percentage Value.
+  - **Inner Label Title Margin**: The margin of the inner label title.
+  - **Inner Cicle Fill Color**: The fill color of the inner circle. (Deafult: "green")
 
 #### Action Attributes
 
@@ -117,3 +128,21 @@ FROM (
 ) AS subquery;
 ```
 Then enable the XY axis to display the data
+
+Example usage of Percentage Chart:
+Given below input data:
+```
+[
+  {
+    "name": "Covered",
+    "count": 17000
+  },
+  {
+    "name": "Not Covered",
+    "count": 3000
+  }
+]
+```
+
+Set Chart Type to "Percentage"
+Set the Inner Label Settings as required, ie the Inner Label title, Font fize etc. or leave defaults

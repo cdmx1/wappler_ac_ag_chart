@@ -74,7 +74,8 @@
               {title: 'Line', value: 'line'},
               {title: 'Pie', value: 'pie'},
               {title: 'Column', value: 'column'},
-              {title: 'Area', value: 'area'}
+              {title: 'Area', value: 'area'},
+              {title: 'Percentage', value: 'percentage'}
               ],
               "help": "Select the type of chart to be displayed"
             },
@@ -276,13 +277,11 @@
               "name": "innerLabels",
               "title": "Inner Labels Config",
               "attributeStartsWith": "dmx-bind",
-              "attribute": "inner_label",
+              "attribute": "inner_labels",
               "type": "boolean",
               "defaultValue": "false",
               "display": "fieldset",
               "show": [
-                "innerLabel",
-                "innerLabelValue",
                 "innerLabelColor",
                 "innerLabelFontSize",
                 "innerLabelTitle",
@@ -292,26 +291,8 @@
               ],
               "noChangeOnHide": true,
               "groupEnabler": true,
-              "help": "Configure inner labels for pie chart"
+              "help": "Configure Inner labels for Percentage chart"
               "children": [
-                {
-                  "name": "innerLabel",
-                  "attributeStartsWith": "dmx-bind",
-                  "attribute": "inner_label",
-                  "title": "Inner Label",
-                  "defaultValue": "false",
-                  "type": "boolean",
-                  "initDisplay": "none"
-                },
-                {
-                  "name": "innerLabelValue",
-                  "attribute": "inner_label_value",
-                  "dataBindings": true,
-                  "title": "Inner Label",
-                  "defaultValue": null,
-                  "type": "text",
-                  "initDisplay": "none"
-                },
                 {
                   "name": "innerLabelColor",
                   "attribute": "inner_label_value_color",
@@ -325,7 +306,7 @@
                   "attribute": "inner_label_value_font_size",
                   "title": "Inner Label Font Size",
                   "type": "number",
-                  "defaultValue": 72,
+                  "defaultValue": 40,
                   "initDisplay": "none"
                 },
                 {

@@ -46,10 +46,9 @@ dmx.Component('ag-chart', {
     xy_axis: { type: Boolean, default: false },
     humanize_ykey: { type: Boolean, default: false },
     inner_radius_offset: { type: Number, default: 0 },
-    inner_label_value: { type: String, default: null },
     inner_label_value_color: { type: String, default: 'red' },
-    inner_label_value_font_size: { type: String, default: 72 },
-    inner_label_title: { type: String, default: 'Fancy title' },
+    inner_label_value_font_size: { type: String, default: 40 },
+    inner_label_title: { type: String, default: 'Coverage' },
     inner_label_title_font_size: { type: Number, default: 24 },
     inner_label_title_margin: { type: Number, default: 4 },
     inner_cicle_fill_color: { type: String, default: 'green' },
@@ -73,29 +72,22 @@ dmx.Component('ag-chart', {
   refreshChart: function () {
     const options = this.props
     const chartId = this.props.id;
-    const theme = this.props.theme;
-    const custom_theme_fills = this.props.custom_theme_fills;
-    const custom_base_theme = this.props.custom_base_theme;
-    const custom_theme_stroke = this.props.custom_theme_stroke;
     const rowData = this.props.data;
     const xkey_user = this.props.xkey;
     const ykeys_user = this.props.ykeys;
     const xkey_title = this.props.xkey_title;
     const ykey_title = this.props.ykey_title;
-    const chart_type = this.props.chart_type;
-    const stacked = this.props.stacked;
-    const strokes = this.props.strokes;
-    const series_label = this.props.series_label;
-    const series_lable_font = this.props.series_lable_font;
-    const series_lable_font_style = this.props.series_lable_font_style;
-    const tooltip_roundoff = this.props.tooltip_roundoff;
-    const legend = this.props.legend;
-    const legend_spacing = this.props.legend_spacing;
-    const legend_position = this.props.legend_position;
-    const legend_shapes = this.props.legend_shapes;
-    const hide_x = this.props.hide_x;
-    const hide_y = this.props.hide_y;
-    const humanize_ykey = this.props.humanize_ykey;
+    let chart_type;
+    let series;
+    let chartData;
+    let xkey;
+    let ykeysArray;
+    if (options.chart_type !== "pie" && options.chart_type !== "column" && options.chart_type !== "bar" && options.chart_type !== "area" && options.chart_type !== "line") {
+      chart_type = "pie";
+    }
+    else {
+      chart_type = options.chart_type
+    }
     function humanize(str) {
       if (str == null) return str;
     
@@ -115,201 +107,207 @@ dmx.Component('ag-chart', {
         '<div class="ag-chart-tooltip-title" style="background-color:' +
         params.color +
         '">' +
-        (humanize_ykey ? humanize(params.yKey):params.yKey) +
+        (options.humanize_ykey ? humanize(params.yKey):params.yKey) +
         '</div>' +
         '<div class="ag-chart-tooltip-content">' +
-        (tooltip_roundoff ? params.yValue.toFixed(0):params.yValue.toFixed(2))  +
+        (options.tooltip_roundoff ? params.yValue.toFixed(0):params.yValue.toFixed(2))  +
         '</div>'
       );
     }
-
-let series;
-let chartData;
-let xkey;
-let ykeysArray;
-var custom_theme = {
-  baseTheme: custom_base_theme,
-  palette: {
-      fills: custom_theme_fills,
-      strokes: [custom_theme_stroke]
-  },
-  overrides: {
-      cartesian: {
-          title: {
-              fontSize: 24
-          },
-          series: {
-              column: {
-                  label: {
-                      enabled: true,
-                      color: 'black'
-                  }
-              }
-          }
-      }
-  }
-};
-if (this.props.xy_axis) {
-  xkey = 'x_axis';
-  const firstKey = Object.keys(rowData[0])[0];
-  ykeysArray = rowData.map(item => item[firstKey]);
-  chartData = rowData.map((item, index) => {
-    const { [firstKey]: firstKeyData, count } = item;
-    const chartItem = { [xkey]: index + 1 };
-    chartItem[firstKeyData] = parseInt(count);
-    return chartItem;
-  });
-  series = ykeysArray.map(ykey => {
-    const seriesConfig = {
-      type: chart_type,
-      stacked: stacked,
-      strokeWidth: (strokes ? 1:0)
-    }
-    if (chart_type !== 'pie') {
-      seriesConfig.yName = humanize_ykey ? humanize(ykey):ykey;
-      seriesConfig.xKey = xkey;
-      seriesConfig.yKey = ykey;
-      seriesConfig.tooltip = { renderer: renderer };
-      seriesConfig.label = {
-        enabled: series_label,
-        fontWeight: series_lable_font,
-        fontStyle: series_lable_font_style
-    }
-    }
-    else {
-      seriesConfig.angleKey = ykey;
-      seriesConfig.sectorLabelKey = ykey;
-      seriesConfig.calloutLabelKey = xkey;
-      seriesConfig.innerRadiusOffset = options.inner_radius_offset;
-      if (options.inner_label) {
-      seriesConfig.innerLabels = [
-        {
-          text: options.inner_label_value,
-          color: options.inner_label_value_color,
-          fontSize: options.inner_label_value_font_size,
+      var custom_theme = {
+        baseTheme: options.custom_base_theme,
+        palette: {
+            fills: options.custom_theme_fills,
+            strokes: [options.custom_theme_stroke]
         },
-        {
-          text: options.inner_label_title,
-          fontSize: options.inner_label_title_font_size,
-          margin: options.inner_label_title_margin,
-        },
-      ]
-      seriesConfig.innerCircle = {
-        fill: options.inner_cicle_fill_color,
-      }
-    }
-
-    }
-    return seriesConfig;
-});
-}
-else {
-  chartData = rowData.map(function(item) {
-    var chartItem = {};
-    var keys = Object.keys(item);
-    if (xkey_user) {
-      xkey = xkey_user
-    }
-    else {
-      xkey = keys[0]; 
-    }
-    
-    chartItem[xkey] = item[xkey];
-    if (ykeys_user.length > 0) {
-    ykeysArray = ykeys_user.split(',').map(function(item) {
-      return item.trim(); 
-    });
-    }
-    else {
-    var ykeysArray = keys.slice(1);
-  }
-    ykeysArray.forEach(function(ykey) {
-        chartItem[ykey] = item[ykey] !== undefined ? parseFloat(item[ykey]) : NaN;
-    });
-    return chartItem;
-});
-    if (xkey_user) {
-      xkey = xkey_user
-    }
-    else {
-      xkey = Object.keys(chartData[0])[0];
-    }
-    if(ykeys_user.length > 0){
-    ykeysArray = ykeys_user.split(',').map(function(item) {
-      return item.trim(); 
-    });
-    }
-    else {
-      ykeysArray = Object.keys(chartData[0]).slice(1);
-  }
-  series = ykeysArray.map(ykey => {
-    const seriesConfig = {
-      type: chart_type, 
-      stacked: stacked,
-      strokeWidth: (strokes ? 1:0)
-    }
-    if (chart_type !== 'pie') {
-      seriesConfig.yName = humanize_ykey ? humanize(ykey):ykey;
-      seriesConfig.xKey = xkey;
-      seriesConfig.yKey = ykey;
-      seriesConfig.tooltip = { renderer: renderer };
-      seriesConfig.label = {
-        enabled: series_label,
-        fontWeight: series_lable_font,
-        fontStyle: series_lable_font_style
-    }
-    }
-    else {
-      seriesConfig.angleKey = ykey;
-      seriesConfig.sectorLabelKey = ykey;
-      seriesConfig.calloutLabelKey = xkey;
-      seriesConfig.innerRadiusOffset = options.inner_radius_offset;
-      if (options.inner_label) {
-        seriesConfig.innerLabels = [
-          {
-            text: options.inner_label_value,
-            color: options.inner_label_value_color,
-            fontSize: options.inner_label_value_font_size,
-          },
-          {
-            text: options.inner_label_title,
-            fontSize: options.inner_label_title_font_size,
-            margin: options.inner_label_title_margin,
-          },
-        ]
-        seriesConfig.innerCircle = {
-          fill: options.inner_cicle_fill_color,
+        overrides: {
+            cartesian: {
+                title: {
+                    fontSize: 24
+                },
+                series: {
+                    column: {
+                        label: {
+                            enabled: true,
+                            color: 'black'
+                        }
+                    }
+                }
+            }
         }
+      };
+      if (options.xy_axis) {
+        xkey = 'x_axis';
+        const firstKey = Object.keys(rowData[0])[0];
+        ykeysArray = rowData.map(item => item[firstKey]);
+        chartData = rowData.map((item, index) => {
+          const { [firstKey]: firstKeyData, count } = item;
+          const chartItem = { [xkey]: index + 1 };
+          chartItem[firstKeyData] = parseInt(count);
+          return chartItem;
+        });
+        series = ykeysArray.map(ykey => {
+          const seriesConfig = {
+            type: chart_type,
+            stacked: options.stacked,
+            strokeWidth: (options.strokes ? 1:0)
+          }
+          
+          if (options.chart_type === 'pie'){
+            seriesConfig.angleKey = ykey;
+            seriesConfig.sectorLabelKey = ykey;
+            seriesConfig.calloutLabelKey = xkey;
+            seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+          }
+          else if (options.chart_type === 'percentage'){
+            const total = rowData.reduce((sum, d) => sum + d[ykey], 0);
+            const percentage = (value) => `${((value / total) * 100).toFixed()}%`;
+            seriesConfig.angleKey = ykey;
+            seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+            seriesConfig.fills = [options.inner_label_value_color, options.inner_cicle_fill_color],
+            seriesConfig.innerLabels = [
+              {
+                text: percentage(rowData[0].count),
+                color: options.inner_label_value_color,
+                fontSize: options.inner_label_value_font_size,
+              },
+              {
+                text: options.inner_label_title,
+                fontSize: options.inner_label_title_font_size,
+                margin: options.inner_label_title_margin,
+              },
+            ]
+            seriesConfig.innerCircle = {
+              fill: options.inner_cicle_fill_color,
+            }
+          }
+          else {
+            seriesConfig.yName = options.humanize_ykey ? humanize(ykey):ykey;
+            seriesConfig.xKey = xkey;
+            seriesConfig.yKey = ykey;
+            seriesConfig.tooltip = { renderer: renderer };
+            seriesConfig.label = {
+              enabled: options.series_label,
+              fontWeight: options.series_lable_font,
+              fontStyle: options.series_lable_font_style
+          }
+          }
+          return seriesConfig;
+      });
       }
-    }
-    return seriesConfig
-
-    });
-} 
+      else {
+        chartData = rowData.map(function(item) {
+          var chartItem = {};
+          var keys = Object.keys(item);
+          if (xkey_user) {
+            xkey = xkey_user
+          }
+          else {
+            xkey = keys[0]; 
+          }
+          
+          chartItem[xkey] = item[xkey];
+          if (ykeys_user.length > 0) {
+          ykeysArray = ykeys_user.split(',').map(function(item) {
+            return item.trim(); 
+          });
+          }
+          else {
+          var ykeysArray = keys.slice(1);
+        }
+          ykeysArray.forEach(function(ykey) {
+              chartItem[ykey] = item[ykey] !== undefined ? parseFloat(item[ykey]) : NaN;
+          });
+          return chartItem;
+      });
+          if (xkey_user) {
+            xkey = xkey_user
+          }
+          else {
+            xkey = Object.keys(chartData[0])[0];
+          }
+          if(ykeys_user.length > 0){
+          ykeysArray = ykeys_user.split(',').map(function(item) {
+            return item.trim(); 
+          });
+          }
+          else {
+            ykeysArray = Object.keys(chartData[0]).slice(1);
+        }
+        series = ykeysArray.map(ykey => {
+          const seriesConfig = {
+            type: chart_type, 
+            stacked: options.stacked,
+            strokeWidth: (options.strokes ? 1:0)
+          }
+          
+          if (options.chart_type === 'pie'){
+            seriesConfig.angleKey = ykey;
+            seriesConfig.sectorLabelKey = ykey;
+            seriesConfig.calloutLabelKey = xkey;
+            seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+          }
+          else if (options.chart_type === 'percentage'){
+            const total = rowData.reduce((sum, d) => sum + d[ykey], 0);
+            const percentage = (value) => `${((value / total) * 100).toFixed()}%`;
+            seriesConfig.angleKey = ykey;
+            seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+            seriesConfig.fills = [options.inner_label_value_color, options.inner_cicle_fill_color],
+            seriesConfig.innerLabels = [
+              {
+                text: percentage(rowData[0].count),
+                color: options.inner_label_value_color,
+                fontSize: options.inner_label_value_font_size,
+              },
+              {
+                text: options.inner_label_title,
+                fontSize: options.inner_label_title_font_size,
+                margin: options.inner_label_title_margin,
+              },
+            ]
+            seriesConfig.innerCircle = {
+              fill: options.inner_cicle_fill_color,
+            }
+          }
+          else {
+            seriesConfig.yName = options.humanize_ykey ? humanize(ykey):ykey;
+            seriesConfig.xKey = xkey;
+            seriesConfig.yKey = ykey;
+            seriesConfig.tooltip = { renderer: renderer };
+            seriesConfig.label = {
+              enabled: options.series_label,
+              fontWeight: options.series_lable_font,
+              fontStyle: options.series_lable_font_style
+            }
+          }
+          return seriesConfig
+        
+          });
+      } 
     this.$node.innerHTML = `<div id=${chartId +'-chart'}></div>`
     chartOptions = {
       container: document.getElementById(chartId+'-chart'),
       data: chartData,
       series: series,
       legend: {
-        enabled: legend,
-        spacing: legend_spacing,
-        position: legend_position,
+        enabled: options.legend,
+        spacing: options.legend_spacing,
+        position: options.legend_position,
         item: {
           marker: {
-              shape: legend_shapes, 
+              shape: options.legend_shapes, 
           }
       }
       },
-    theme: (theme == 'custom_theme' ? custom_theme : theme)
+    theme: (options.theme == 'custom_theme' ? custom_theme : options.theme)
     };
-    if (options.chart_type != 'pie') {
+    if (chart_type != 'pie') {
       chartOptions.axes = [
         {
           type: 'category',
           position: 'bottom',
           label: {
-            enabled: !hide_x,
+            enabled: !options.hide_x,
           },
           title: {
             enabled: xkey_title != null,
@@ -320,7 +318,7 @@ else {
           type: 'number',
           position: 'left',
           label: {
-            enabled: !hide_y,
+            enabled: !options.hide_y,
           },
           title: {
             enabled: ykey_title != null,
