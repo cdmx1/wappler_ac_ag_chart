@@ -243,8 +243,8 @@ dmx.Component('ag-chart', {
           
           if (options.chart_type === 'pie'){
             seriesConfig.angleKey = ykey;
-            seriesConfig.sectorLabelKey = hide_y ? null : ykey;
-            seriesConfig.calloutLabelKey = hide_x ? null : xkey;
+            seriesConfig.sectorLabelKey = options.hide_y ? null : ykey;
+            seriesConfig.calloutLabelKey = options.hide_x ? null : xkey;
             seriesConfig.innerRadiusOffset = options.inner_radius_offset;
           }
           else if (options.chart_type === 'percentage'){
