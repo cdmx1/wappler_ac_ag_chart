@@ -108,7 +108,7 @@ dmx.Component('ag-chart', {
         (options.humanize_ykey ? humanize(params.yKey):params.yKey) +
         '</div>' +
         '<div class="ag-chart-tooltip-content">' +
-        (options.tooltip_roundoff ? params.datum[params.yKey].toFixed(0):params.params.datum[params.yKey].toFixed(2))  +
+        (options.tooltip_roundoff ? params.datum[params.yKey].toFixed(0):params.datum[params.yKey].toFixed(2))  +
         '</div>'
       );
     }
@@ -149,10 +149,11 @@ dmx.Component('ag-chart', {
             type: chart_type,
             stacked: options.stacked,
             strokeWidth: (options.strokes ? options.strokes_width:0),
-            direction: this.props.chart_type === "bar" ? "horizontal":null,
           }
-          
-          if (options.chart_type === 'pie'){
+          if (options.chart_type === 'column' || options.chart_type === 'bar') {
+            seriesConfig.direction = options.chart_type === "bar" ? "horizontal" : null;
+          }
+          if (options.chart_type === 'pie') {
             seriesConfig.angleKey = ykey;
             seriesConfig.sectorLabelKey = ykey;
             seriesConfig.calloutLabelKey = xkey;
@@ -237,11 +238,12 @@ dmx.Component('ag-chart', {
           const seriesConfig = {
             type: chart_type, 
             stacked: options.stacked,
-            strokeWidth: (options.strokes ? options.strokes_width:0),
-            direction: this.props.chart_type === "bar" ? "horizontal":null,
+            strokeWidth: (options.strokes ? options.strokes_width:0)
           }
-          
-          if (options.chart_type === 'pie'){
+          if (options.chart_type === 'column'|| options.chart_type === 'bar') {
+            seriesConfig.direction = options.chart_type === "bar" ? "horizontal":null
+          }
+          if (options.chart_type === 'pie') {
             seriesConfig.angleKey = ykey;
             seriesConfig.sectorLabelKey = options.hide_y ? null : ykey;
             seriesConfig.calloutLabelKey = options.hide_x ? null : xkey;
