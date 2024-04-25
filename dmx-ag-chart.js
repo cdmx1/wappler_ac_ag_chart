@@ -33,6 +33,7 @@ dmx.Component('ag-chart', {
     data: { type: Array, default: [] },
     stacked: { type: Boolean, default: true },
     strokes: { type: Boolean, default: false },
+    strokes_width : { type : Number, default:1},
     series_label: { type: Boolean, default: false },
     series_label_font: { type: String, default: 'bold' },
     series_label_font_style: { type: String, default: 'normal' },
@@ -82,12 +83,9 @@ dmx.Component('ag-chart', {
     let chartData;
     let xkey;
     let ykeysArray;
-    if (options.chart_type !== "pie" && options.chart_type !== "column" && options.chart_type !== "bar" && options.chart_type !== "area" && options.chart_type !== "line") {
-      chart_type = "pie";
-    }
-    else {
-      chart_type = options.chart_type
-    }
+    const validChartTypes = ["pie", "column", "bar", "area", "line"];
+    chart_type = validChartTypes.includes(options.chart_type) ? options.chart_type : "pie";
+    chart_type = chart_type === "column" ? "bar" : chart_type;
     function humanize(str) {
       if (str == null) return str;
     
@@ -110,7 +108,7 @@ dmx.Component('ag-chart', {
         (options.humanize_ykey ? humanize(params.yKey):params.yKey) +
         '</div>' +
         '<div class="ag-chart-tooltip-content">' +
-        (options.tooltip_roundoff ? params.yValue.toFixed(0):params.yValue.toFixed(2))  +
+        (options.tooltip_roundoff ? params.datum[params.yKey].toFixed(0):params.params.datum[params.yKey].toFixed(2))  +
         '</div>'
       );
     }
@@ -150,7 +148,8 @@ dmx.Component('ag-chart', {
           const seriesConfig = {
             type: chart_type,
             stacked: options.stacked,
-            strokeWidth: (options.strokes ? 1:0)
+            strokeWidth: (options.strokes ? options.strokes_width:0),
+            direction: this.props.chart_type === "bar" ? "horizontal":null,
           }
           
           if (options.chart_type === 'pie'){
@@ -238,7 +237,8 @@ dmx.Component('ag-chart', {
           const seriesConfig = {
             type: chart_type, 
             stacked: options.stacked,
-            strokeWidth: (options.strokes ? 1:0)
+            strokeWidth: (options.strokes ? options.strokes_width:0),
+            direction: this.props.chart_type === "bar" ? "horizontal":null,
           }
           
           if (options.chart_type === 'pie'){
@@ -327,20 +327,20 @@ dmx.Component('ag-chart', {
         },
       ];
     }
-    agCharts.AgChart.create(chartOptions);
+    agCharts.AgCharts.create(chartOptions);
   },
 
   events: {
-    'dmx-ag-chart-row-data-updated': Event
+    chart_updated: Event
   },
 
-  render: function(node) {
+  init: function() {
     if (this.$node) {
       this.$parse();
     }
   },
 
-  update: function (props) {
+  requestUpdate: function (field, props) {
     if (!dmx.equal(this.props.data, props.data) && !this.props.noload) {
       this.refreshChart();
     }

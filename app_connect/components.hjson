@@ -149,7 +149,17 @@
               "title": "Strokes",
               "type": "boolean",
               "defaultValue": "false",
+              "show": ['strokesWidth'],
               "help": "Enable or Disable outline strokes for fills"
+            },
+            {
+              "name": "strokesWidth",
+              "attribute": "strokes_width",
+              "title": "Strokes Width",
+              "type": "number",
+              "defaultValue": 1,
+              "initDisplay": 'none'
+              "help": "Set stroke width when enabled."
             },
             {
               "name": "tooltip_roundoff",
@@ -361,7 +371,7 @@
       "allowed_children": {},
       "copyFiles": [
         {
-          "src": "../../../node_modules/ag-charts-community/dist/ag-charts-community.min.js",
+          "src": "../../../node_modules/ag-charts-community/dist/umd/ag-charts-community.min.js",
           "dst": "js/ag-charts-community.min.js"
         },
         {

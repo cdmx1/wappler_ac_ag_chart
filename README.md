@@ -1,5 +1,7 @@
 #### Developed and Maintained by: Roney Dsilva
 
+# Note: Module supports only AC2. AG Charts updated to 9.2
+
 ## AG Chart Component Documentation
 
 ### Component Overview

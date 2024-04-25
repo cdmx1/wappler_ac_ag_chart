@@ -1,6 +1,6 @@
 {
     "name": "@cdmx/wappler_ac_ag_chart",
-    "version": "0.1.7",
+    "version": "0.2.0-beta",
     "type": "module",
     "description": "App Connect module for AG Chart Generation",
     "license": "MIT",
@@ -18,6 +18,6 @@
         "publish-dry-run": "npm publish ./dist --access public --dry-run"
     },
     "dependencies": {
-        "ag-charts-community": "8.2.x"
+        "ag-charts-community": "9.2.x"
     }
 }
