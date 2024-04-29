@@ -71,11 +71,13 @@
               "type": "droplist",
               "defaultValue": "line",
               "values": [
-              {title: 'Line', value: 'line'},
-              {title: 'Pie', value: 'pie'},
-              {title: 'Column', value: 'column'},
-              {title: 'Area', value: 'area'},
-              {title: 'Percentage', value: 'percentage'}
+              {title: 'Line', value: 'line', show:[], hide:['innerRadiusOffset', 'innerLabels'] },
+              {title: 'Pie', value: 'pie', show:[], hide:['innerRadiusOffset', 'innerLabels']},
+              {title: 'Column', value: 'column', show:[], hide:['innerRadiusOffset', 'innerLabels']},
+              {title: 'Bar', value: 'bar', show:[], hide:['innerRadiusOffset', 'innerLabels']},
+              {title: 'Donut', value: 'donut', show:['innerRadiusOffset', 'innerLabels'], hide:[]},
+              {title: 'Area', value: 'area', show:['innerRadiusOffset', 'innerLabels'], hide:[]},
+              {title: 'Percentage', value: 'percentage', show:['innerRadiusOffset', 'innerLabels'], hide:[]}
               ],
               "help": "Select the type of chart to be displayed"
             },
@@ -231,7 +233,7 @@
               "help": "Enable/Disable the legend"
             },
             {
-              "name": "legend_shapes",
+              "name": "legendShapes",
               "attribute": "legend_shapes",
               "title": "Legend shapes",
               "type": "droplist",
@@ -245,14 +247,14 @@
               "help": "Select the Legend shape"
             },
             {
-              "name": "legend_spacing",
+              "name": "legendSpacing",
               "attribute": "legend_spacing",
               "title": "Legend Spacing",
               "type": "number",
               "help": "Legend Spacing"
             },
             {
-              "name": "legend_position",
+              "name": "legendPosition",
               "attribute": "legend_position",
               "title": "Legend Position",
               "type": "droplist",
@@ -264,16 +266,17 @@
               "help": "Legend Position"
             },
             {
-              "name": "humanize_ykey",
+              "name": "humanizeYkey",
               "attribute": "dmx-bind:humanize_ykey",
               "title": "Humanize Y Axis Legends",
               "type": "boolean",
               "help": "Humanize Y Axis Legends"
             },
             {
-              "name": "inner_radius_offset",
+              "name": "innerRadiusOffset",
               "attribute": "inner_radius_offset",
               "defaultValue": 0,
+              "initDisplay": "none"
               "title": "Inner Radius Offset",
               "type": "number",
               "help": "Inner Radius Offset, applicable for pie charts to make them donut charts or for Inner labels"
@@ -291,6 +294,7 @@
               "type": "boolean",
               "defaultValue": "false",
               "display": "fieldset",
+              "initDisplay": "none"
               "show": [
                 "innerLabelColor",
                 "innerLabelFontSize",

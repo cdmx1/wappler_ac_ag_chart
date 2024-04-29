@@ -46,7 +46,7 @@ dmx.Component('ag-chart', {
     hide_y: { type: Boolean, default: false },
     xy_axis: { type: Boolean, default: false },
     humanize_ykey: { type: Boolean, default: false },
-    inner_radius_offset: { type: Number, default: 0 },
+    inner_radius_ratio: { type: Number, default: 0.5 },
     inner_label_value_color: { type: String, default: 'red' },
     inner_label_value_font_size: { type: String, default: 40 },
     inner_label_title: { type: String, default: 'Coverage' },
@@ -83,7 +83,7 @@ dmx.Component('ag-chart', {
     let chartData;
     let xkey;
     let ykeysArray;
-    const validChartTypes = ["pie", "column", "bar", "area", "line"];
+    const validChartTypes = ["pie", "column", "bar", "area", "line", "donut"];
     chart_type = validChartTypes.includes(options.chart_type) ? options.chart_type : "pie";
     chart_type = chart_type === "column" ? "bar" : chart_type;
     function humanize(str) {
@@ -147,17 +147,19 @@ dmx.Component('ag-chart', {
         series = ykeysArray.map(ykey => {
           const seriesConfig = {
             type: chart_type,
-            stacked: options.stacked,
-            strokeWidth: (options.strokes ? options.strokes_width:0),
+            stacked: (options.chart_type === 'pie' || options.chart_type === 'donut') ? undefined : options.stacked,
+            strokeWidth: (options.strokes ? options.strokes_width : 0)
           }
           if (options.chart_type === 'column' || options.chart_type === 'bar') {
             seriesConfig.direction = options.chart_type === "bar" ? "horizontal" : null;
           }
-          if (options.chart_type === 'pie') {
+          if (options.chart_type === 'pie' || options.chart_type === 'donut') {
             seriesConfig.angleKey = ykey;
-            seriesConfig.sectorLabelKey = ykey;
-            seriesConfig.calloutLabelKey = xkey;
-            seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+            seriesConfig.sectorLabelKey = options.hide_y ? undefined : ykey;
+            seriesConfig.calloutLabelKey = options.hide_x ? undefined : xkey;
+            if (options.chart_type === 'donut') {
+                seriesConfig.innerRadiusRatio = options.inner_radius_ratio;
+            }
           }
           else if (options.chart_type === 'percentage'){
             const total = rowData.reduce((sum, d) => sum + d[ykey], 0);
@@ -237,17 +239,19 @@ dmx.Component('ag-chart', {
         series = ykeysArray.map(ykey => {
           const seriesConfig = {
             type: chart_type, 
-            stacked: options.stacked,
-            strokeWidth: (options.strokes ? options.strokes_width:0)
+            stacked: (options.chart_type === 'pie' || options.chart_type === 'donut') ? undefined : options.stacked,
+            strokeWidth: (options.strokes ? options.strokes_width : 0)
           }
           if (options.chart_type === 'column'|| options.chart_type === 'bar') {
             seriesConfig.direction = options.chart_type === "bar" ? "horizontal":null
           }
-          if (options.chart_type === 'pie') {
+          if (options.chart_type === 'pie' || options.chart_type === 'donut') {
             seriesConfig.angleKey = ykey;
-            seriesConfig.sectorLabelKey = options.hide_y ? null : ykey;
-            seriesConfig.calloutLabelKey = options.hide_x ? null : xkey;
-            seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+            seriesConfig.sectorLabelKey = options.hide_y ? undefined : ykey;
+            seriesConfig.calloutLabelKey = options.hide_x ? undefined : xkey;
+            if (options.chart_type === 'donut') {
+                seriesConfig.innerRadiusRatio = options.inner_radius_ratio;
+            }
           }
           else if (options.chart_type === 'percentage'){
             const total = rowData.reduce((sum, d) => sum + d[ykey], 0);
@@ -303,7 +307,7 @@ dmx.Component('ag-chart', {
       },
     theme: (options.theme == 'custom_theme' ? custom_theme : options.theme)
     };
-    if (chart_type != 'pie') {
+    if (!['pie', 'donut'].includes(chart_type)) {
       chartOptions.axes = [
         {
           type: 'category',
