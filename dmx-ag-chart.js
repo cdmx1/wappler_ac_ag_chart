@@ -347,7 +347,7 @@ dmx.Component('ag-chart', {
   },
 
   requestUpdate: function (field, props) {
-    if (!dmx.equal(this.props.data, props.data) && !this.props.noload) {
+    if (!dmx.equal(this.props.data, props.data) && this.props.data.length>0 && !this.props.noload) {
       this.refreshChart();
     }
   },
