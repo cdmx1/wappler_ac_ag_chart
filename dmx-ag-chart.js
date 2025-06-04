@@ -137,17 +137,33 @@ dmx.Component('ag-chart', {
             }
         }
       };
+      function sanitizeKey(key) {
+        return key
+          .replace(/[^a-zA-Z0-9]/g, '_') // Replace non-alphanumeric chars with underscore
+          .replace(/^[0-9]/, '_$&')      // Prefix with underscore if starts with number
+          .replace(/_{2,}/g, '_')        // Replace multiple underscores with single
+          .replace(/^_|_$/g, '');        // Remove leading/trailing underscores
+      }
       if (options.xy_axis) {
         xkey = 'x_axis';
         const firstKey = Object.keys(rowData[0])[0];
-        ykeysArray = rowData.map(item => item[firstKey]);
+        const originalYKeys = rowData.map(item => item[firstKey]);
+        ykeysArray = originalYKeys.map(sanitizeKey);
+        
+        const keyMapping = {};
+        originalYKeys.forEach((original, index) => {
+          keyMapping[ykeysArray[index]] = original;
+        });
+        
         chartData = rowData.map((item, index) => {
           const { [firstKey]: firstKeyData, count } = item;
           const chartItem = { [xkey]: index + 1 };
-          chartItem[firstKeyData] = parseInt(count);
+          const sanitizedKey = sanitizeKey(firstKeyData);
+          chartItem[sanitizedKey] = parseInt(count);
           return chartItem;
         });
-        series = ykeysArray.map(ykey => {
+        
+        series = ykeysArray.map((ykey, index) => {
           const seriesConfig = {
             type: chart_type,
             stacked: (options.chart_type === 'pie' || options.chart_type === 'donut') ? undefined : options.stacked,
@@ -187,7 +203,8 @@ dmx.Component('ag-chart', {
             }
           }
           else {
-            seriesConfig.yName = options.humanize_ykey ? humanize(ykey):ykey;
+      
+            seriesConfig.yName = options.humanize_ykey ? humanize(originalYKeys[index]) : originalYKeys[index];
             seriesConfig.xKey = xkey;
             seriesConfig.yKey = ykey;
             seriesConfig.tooltip = { renderer: renderer };
@@ -195,7 +212,7 @@ dmx.Component('ag-chart', {
               enabled: options.series_label,
               fontWeight: options.series_lable_font,
               fontStyle: options.series_lable_font_style
-          }
+            }
           }
           return seriesConfig;
       });
@@ -205,93 +222,108 @@ dmx.Component('ag-chart', {
           var chartItem = {};
           var keys = Object.keys(item);
           if (xkey_user) {
-            xkey = xkey_user
+            xkey = xkey_user;
           }
           else {
             xkey = keys[0]; 
           }
           
           chartItem[xkey] = item[xkey];
-          if (ykeys_user.length > 0) {
-          ykeysArray = ykeys_user.split(',').map(function(item) {
-            return item.trim(); 
-          });
+          if (ykeys_user && ykeys_user.length > 0) {
+            ykeysArray = ykeys_user.split(',').map(function(item) {
+              return item.trim(); 
+            });
           }
           else {
-          var ykeysArray = keys.slice(1);
-        }
+         
+            ykeysArray = keys.slice(1); 
+          }
+          
+         
+          if (!ykeysArray || !Array.isArray(ykeysArray)) {
+            console.warn('ykeysArray is not valid, using fallback');
+            ykeysArray = keys.slice(1);
+          }
+          
           ykeysArray.forEach(function(ykey) {
               chartItem[ykey] = item[ykey] !== undefined ? parseFloat(item[ykey]) : NaN;
           });
           return chartItem;
       });
-          if (xkey_user) {
-            xkey = xkey_user
-          }
-          else {
-            xkey = Object.keys(chartData[0])[0];
-          }
-          if(ykeys_user.length > 0){
-          ykeysArray = ykeys_user.split(',').map(function(item) {
-            return item.trim(); 
-          });
-          }
-          else {
-            ykeysArray = Object.keys(chartData[0]).slice(1);
-        }
-        series = ykeysArray.map(ykey => {
-          const seriesConfig = {
-            type: chart_type, 
-            stacked: (options.chart_type === 'pie' || options.chart_type === 'donut') ? undefined : options.stacked,
-            strokeWidth: (options.strokes ? options.strokes_width : 0)
-          }
-          if (options.chart_type === 'column'|| options.chart_type === 'bar') {
-            seriesConfig.direction = options.chart_type === "bar" ? "horizontal":null
-          }
-          if (options.chart_type === 'pie' || options.chart_type === 'donut') {
-            seriesConfig.angleKey = ykey;
-            seriesConfig.sectorLabelKey = options.hide_y ? undefined : ykey;
-            seriesConfig.calloutLabelKey = options.hide_x ? undefined : xkey;
-            if (options.chart_type === 'donut') {
-                seriesConfig.innerRadiusRatio = options.inner_radius_ratio;
-            }
-          }
-          else if (options.chart_type === 'percentage'){
-            const total = rowData.reduce((sum, d) => sum + d[ykey], 0);
-            const percentage = (value) => `${((value / total) * 100).toFixed()}%`;
-            seriesConfig.angleKey = ykey;
-            seriesConfig.innerRadiusOffset = options.inner_radius_offset;
-            seriesConfig.fills = [options.inner_label_value_color, options.inner_cicle_fill_color],
-            seriesConfig.innerLabels = [
-              {
-                text: percentage(rowData[0].count),
-                color: options.inner_label_value_color,
-                fontSize: options.inner_label_value_font_size,
-              },
-              {
-                text: options.inner_label_title,
-                fontSize: options.inner_label_title_font_size,
-                margin: options.inner_label_title_margin,
-              },
-            ]
-            seriesConfig.innerCircle = {
-              fill: options.inner_cicle_fill_color,
-            }
-          }
-          else {
-            seriesConfig.yName = options.humanize_ykey ? humanize(ykey):ykey;
-            seriesConfig.xKey = xkey;
-            seriesConfig.yKey = ykey;
-            seriesConfig.tooltip = { renderer: renderer };
-            seriesConfig.label = {
-              enabled: options.series_label,
-              fontWeight: options.series_lable_font,
-              fontStyle: options.series_lable_font_style
-            }
-          }
-          return seriesConfig
+      const originalXKey = xkey;
+  
+      const originalYKeys = [...ykeysArray]; 
+      xkey = sanitizeKey(xkey);
+      ykeysArray = ykeysArray.map(sanitizeKey);
+      
+      chartData = chartData.map(item => {
+        const newItem = {};
+        newItem[xkey] = item[originalXKey]; 
         
-          });
+        originalYKeys.forEach((originalYKey, index) => {
+          const sanitizedYKey = ykeysArray[index];
+          newItem[sanitizedYKey] = item[originalYKey];
+        });
+        
+        return newItem;
+      });
+  
+      series = ykeysArray.map((ykey, index) => {
+        const seriesConfig = {
+          type: chart_type, 
+          stacked: (options.chart_type === 'pie' || options.chart_type === 'donut') ? undefined : options.stacked,
+          strokeWidth: (options.strokes ? options.strokes_width : 0)
+        }
+        
+        if (options.chart_type === 'column' || options.chart_type === 'bar') {
+          seriesConfig.direction = options.chart_type === "bar" ? "horizontal" : null;
+        }
+        
+        if (options.chart_type === 'pie' || options.chart_type === 'donut') {
+          seriesConfig.angleKey = ykey;
+          seriesConfig.sectorLabelKey = options.hide_y ? undefined : ykey;
+          seriesConfig.calloutLabelKey = options.hide_x ? undefined : xkey;
+          if (options.chart_type === 'donut') {
+              seriesConfig.innerRadiusRatio = options.inner_radius_ratio;
+          }
+        }
+        else if (options.chart_type === 'percentage'){
+          const total = rowData.reduce((sum, d) => sum + d[originalYKeys[index]], 0);
+          const percentage = (value) => `${((value / total) * 100).toFixed()}%`;
+          seriesConfig.angleKey = ykey;
+          seriesConfig.innerRadiusOffset = options.inner_radius_offset;
+          seriesConfig.fills = [options.inner_label_value_color, options.inner_cicle_fill_color];
+          seriesConfig.innerLabels = [
+            {
+              text: percentage(rowData[0].count),
+              color: options.inner_label_value_color,
+              fontSize: options.inner_label_value_font_size,
+            },
+            {
+              text: options.inner_label_title,
+              fontSize: options.inner_label_title_font_size,
+              margin: options.inner_label_title_margin,
+            },
+          ];
+          seriesConfig.innerCircle = {
+            fill: options.inner_cicle_fill_color,
+          };
+        }
+        else {
+          const originalYKey = originalYKeys[index];
+          seriesConfig.yName = options.humanize_ykey ? humanize(originalYKey) : originalYKey;
+          seriesConfig.xKey = xkey; 
+          seriesConfig.yKey = ykey;
+          seriesConfig.tooltip = { renderer: renderer };
+          seriesConfig.label = {
+            enabled: options.series_label,
+            fontWeight: options.series_lable_font,
+            fontStyle: options.series_lable_font_style
+          }
+        }
+        return seriesConfig;
+        
+        });
       } 
     this.$node.innerHTML = `<div id=${chartId +'-chart'}></div>`
     chartOptions = {
